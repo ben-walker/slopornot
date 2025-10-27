@@ -5,6 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
 import tseslint from "typescript-eslint";
+import mantine from "eslint-config-mantine";
 import { defineConfig, globalIgnores } from "eslint/config";
 import stylistic from "@stylistic/eslint-plugin";
 
@@ -13,6 +14,7 @@ export default defineConfig([
   {
     files: ["**/*.{js,ts,tsx}"],
     extends: [
+      mantine,
       js.configs.recommended,
       tseslint.configs.strictTypeChecked,
       tseslint.configs.stylisticTypeChecked,
