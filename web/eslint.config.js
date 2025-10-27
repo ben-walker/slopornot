@@ -1,13 +1,13 @@
-import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
+import js from "@eslint/js";
+import mantine from "eslint-config-mantine";
+import reactDom from "eslint-plugin-react-dom";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-import tseslint from "typescript-eslint";
-import mantine from "eslint-config-mantine";
-import { defineConfig, globalIgnores } from "eslint/config";
 import stylistic from "@stylistic/eslint-plugin";
+import tseslint from "typescript-eslint";
 
 export default defineConfig([
   globalIgnores(["dist"]),
@@ -37,6 +37,9 @@ export default defineConfig([
         project: ["./tsconfig.node.json", "./tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
+    },
+    rules: {
+      "sort-imports": ["error"],
     },
   },
   {

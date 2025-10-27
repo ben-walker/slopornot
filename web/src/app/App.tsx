@@ -1,6 +1,6 @@
 import { Button, Container, Title } from "@mantine/core";
-import { useState } from "react";
 import { Provider } from "./Provider";
+import { useState } from "react";
 
 function App() {
   const [count, setCount] = useState(0);
