@@ -1,4 +1,5 @@
 import "@mantine/core/styles.css";
+import { BrowserRouter } from "react-router";
 import { MantineProvider } from "@mantine/core";
 
 interface ProviderProps {
@@ -10,7 +11,9 @@ function Provider({
 }: ProviderProps) {
   return (
     <MantineProvider>
-      {children}
+      <BrowserRouter>
+        {children}
+      </BrowserRouter>
     </MantineProvider>
   );
 }
