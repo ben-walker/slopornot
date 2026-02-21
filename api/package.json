@@ -2,7 +2,8 @@
   "name": "slopornot-api",
   "type": "module",
   "scripts": {
-    "dev": "tsx ./src/main.ts"
+    "dev": "tsx ./src/main.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "fastify": "^5.6.1"
