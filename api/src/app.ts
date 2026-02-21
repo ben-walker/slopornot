@@ -1,5 +1,11 @@
 import Fastify from "fastify";
 
-const app = Fastify();
+const buildApp = () => {
+  const app = Fastify({
+    logger: true,
+  });
 
-export { app };
+  return app;
+};
+
+export { buildApp };
