@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import sensible from "@fastify/sensible";
 import { sets } from "./modules/sets/routes";
@@ -9,6 +10,7 @@ const buildApp = () => {
     logger: true,
   }).withTypeProvider<TypeBoxTypeProvider>();
 
+  app.register(cors);
   app.register(helmet);
   app.register(sensible);
 
