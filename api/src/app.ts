@@ -11,6 +11,8 @@ const buildApp = () => {
 
   app.register(helmet);
   app.register(sensible);
+
+  // App routes
   app.register(sets, { prefix: "/sets" });
 
   return app;
