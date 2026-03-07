@@ -8,8 +8,10 @@
   },
   "dependencies": {
     "@fastify/helmet": "^13.0.2",
+    "@fastify/type-provider-typebox": "^6.1.0",
     "close-with-grace": "^2.5.0",
-    "fastify": "^5.6.1"
+    "fastify": "^5.6.1",
+    "typebox": "^1.1.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
