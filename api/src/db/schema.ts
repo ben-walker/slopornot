@@ -4,6 +4,4 @@ const sets = pgTable("sets", {
   id: uuid("id").primaryKey().defaultRandom(),
 });
 
-export {
-  sets,
-};
+export { sets };
