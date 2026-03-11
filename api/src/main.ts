@@ -1,5 +1,6 @@
 import { buildApp } from "./app";
 import closeWithGrace from "close-with-grace";
+import { config } from "./config";
 
 const app = buildApp();
 
@@ -18,7 +19,7 @@ closeWithGrace(async ({ err, signal }) => {
 });
 
 try {
-  await app.listen({ port: 3000 }); // TODO: env configured
+  await app.listen({ host: config.HOST, port: config.PORT });
 }
 catch (err) {
   app.log.error({ err }, "Server failed to start");

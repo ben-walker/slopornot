@@ -1,5 +1,6 @@
 import * as schema from "src/db/schema";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { config } from "src/config";
 import { drizzle } from "drizzle-orm/postgres-js";
 import fp from "fastify-plugin";
 
@@ -10,7 +11,7 @@ declare module "fastify" {
 }
 
 const db = fp((app) => {
-  const db = drizzle("", { schema }); // TODO: database url here
+  const db = drizzle(config.DATABASE_URL, { schema });
 
   app.decorate("db", db);
 
