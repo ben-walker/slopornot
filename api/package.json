@@ -2,7 +2,8 @@
   "name": "slopornot-api",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch ./src/main.ts",
+    "dev": "bash ./scripts/dev.sh",
+    "dev:down": "bash ./scripts/dev-down.sh",
     "build": "tsc && tsdown",
     "lint": "eslint ."
   },
