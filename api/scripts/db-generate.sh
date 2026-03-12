@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npx drizzle-kit generate
+drizzle-kit generate
