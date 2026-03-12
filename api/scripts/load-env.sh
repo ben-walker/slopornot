@@ -1,5 +1,8 @@
 #!/bin/bash
 
 set -a
-source .env
+
+# Load .env file if it exists
+[ -f .env ] && source .env
+
 set +a

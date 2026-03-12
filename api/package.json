@@ -2,9 +2,11 @@
   "name": "slopornot-api",
   "type": "module",
   "scripts": {
+    "build": "tsc && tsdown",
+    "db:generate": "bash ./scripts/db-generate.sh",
+    "db:migrate": "bash ./scripts/db-migrate.sh",
     "dev": "bash ./scripts/dev.sh",
     "dev:down": "bash ./scripts/dev-down.sh",
-    "build": "tsc && tsdown",
     "lint": "eslint ."
   },
   "dependencies": {
