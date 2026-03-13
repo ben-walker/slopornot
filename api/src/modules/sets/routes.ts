@@ -14,11 +14,7 @@ const sets: FastifyPluginCallbackTypebox = (app) => {
     const set = await app.db.query.sets.findFirst({
       where: (sets, { eq }) => eq(sets.date, date),
       with: {
-        images: {
-          columns: {
-            is_ai: false, // Excluded from response to prevent cheating
-          },
-        },
+        images: true,
       },
     });
 
