@@ -17,4 +17,4 @@ ENV NODE_ENV=production
 COPY --chown=node:node package*.json ./
 RUN npm ci --omit=dev
 COPY --from=build --chown=node:node /app/dist ./dist
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/main.mjs"]
