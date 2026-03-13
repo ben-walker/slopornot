@@ -5,6 +5,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { generateConsecutiveDates } from "./utils/seed";
 
 const ENTITY_COUNT = 10;
+const STORAGE_URL = "https://picsum.photos/800/600";
 
 const db = drizzle(config.DATABASE_URL);
 
@@ -17,6 +18,11 @@ await seed(db, schema).refine(funcs => ({
     },
     with: {
       images: ENTITY_COUNT,
+    },
+  },
+  images: {
+    columns: {
+      storage_url: funcs.valuesFromArray({ values: [STORAGE_URL] }),
     },
   },
 }));
