@@ -6,7 +6,8 @@
     "db:generate": "bash ./scripts/db-generate.sh",
     "dev": "bash ./scripts/dev.sh",
     "dev:down": "bash ./scripts/dev-down.sh",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "populate:set": "tsx --env-file=.env ./scripts/populate-set.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
