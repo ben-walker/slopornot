@@ -12,7 +12,7 @@ const sets: FastifyPluginCallbackTypebox = (app) => {
     const { date } = request.params;
 
     const set = await app.db.query.sets.findFirst({
-      where: (sets, { eq }) => eq(sets.date, date),
+      where: { date },
       with: {
         images: true,
       },

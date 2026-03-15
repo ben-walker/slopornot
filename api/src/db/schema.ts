@@ -6,7 +6,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { defineRelations } from "drizzle-orm";
 
 const sets = pgTable("sets", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -22,21 +22,20 @@ const images = pgTable("images", {
   created_at: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// Relations
-const setsRelations = relations(sets, ({ many }) => ({
-  images: many(images),
-}));
-
-const imagesRelations = relations(images, ({ one }) => ({
-  set: one(sets, {
-    fields: [images.set_id],
-    references: [sets.id],
-  }),
+const relations = defineRelations({ images, sets }, helpers => ({
+  sets: {
+    images: helpers.many.images(),
+  },
+  images: {
+    set: helpers.one.sets({
+      from: helpers.images.set_id,
+      to: helpers.sets.id,
+    }),
+  },
 }));
 
 export {
-  images,
   sets,
-  imagesRelations,
-  setsRelations,
+  images,
+  relations,
 };

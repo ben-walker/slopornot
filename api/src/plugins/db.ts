@@ -6,12 +6,15 @@ import fp from "fastify-plugin";
 
 declare module "fastify" {
   interface FastifyInstance {
-    db: PostgresJsDatabase<typeof schema>;
+    db: PostgresJsDatabase<typeof schema, typeof schema.relations>;
   }
 }
 
 const db = fp((app) => {
-  const db = drizzle(config.DATABASE_URL, { schema });
+  const db = drizzle(config.DATABASE_URL, {
+    schema,
+    relations: schema.relations,
+  });
 
   app.decorate("db", db);
 
