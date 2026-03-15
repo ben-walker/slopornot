@@ -12,7 +12,8 @@
     "@mantine/hooks": "^8.3.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router": "^7.9.5"
+    "react-router": "^7.9.5",
+    "typebox": "^1.1.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
