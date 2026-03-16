@@ -1,6 +1,4 @@
-FROM node:24-alpine3.23 AS base
-
-FROM base AS build
+FROM node:24-alpine3.23 AS build
 WORKDIR /app
 RUN chown node:node /app
 USER node
