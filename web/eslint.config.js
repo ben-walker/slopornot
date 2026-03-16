@@ -10,7 +10,7 @@ import stylistic from "@stylistic/eslint-plugin";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["dist"]),
+  globalIgnores(["dist", "src/api/generated.ts"]),
   {
     files: ["**/*.{js,ts,tsx}"],
     extends: [
