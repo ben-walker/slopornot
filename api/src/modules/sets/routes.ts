@@ -1,4 +1,5 @@
 import type { FastifyPluginCallbackTypebox } from "@fastify/type-provider-typebox";
+import { SetWithImages } from "./schemas";
 import { Type } from "@fastify/type-provider-typebox";
 
 const sets: FastifyPluginCallbackTypebox = (app) => {
@@ -7,6 +8,9 @@ const sets: FastifyPluginCallbackTypebox = (app) => {
       params: Type.Object({
         date: Type.String({ format: "date" }),
       }),
+      response: {
+        200: SetWithImages,
+      },
     },
   }, async (request, reply) => {
     const { date } = request.params;
