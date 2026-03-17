@@ -14,7 +14,7 @@ function Provider({
 }: ProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider>
+      <MantineProvider defaultColorScheme="auto">
         <BrowserRouter>
           {children}
         </BrowserRouter>
