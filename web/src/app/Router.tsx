@@ -1,10 +1,13 @@
 import { Route, Routes } from "react-router";
-import { Home } from "./routes/Home";
+import { AppRoot } from "./routes/layouts/AppRoot";
+import { Game } from "./routes/Game";
 
 function Router() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route element={<AppRoot />}>
+        <Route path="/" element={<Game />} />
+      </Route>
     </Routes>
   );
 }
