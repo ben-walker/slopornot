@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import { config } from "./config";
 import cors from "@fastify/cors";
 import { db } from "./plugins/db";
 import helmet from "@fastify/helmet";
@@ -25,7 +26,11 @@ const buildApp = () => {
 
   // App routes
   app.register(sets, { prefix: "/sets" });
-  app.register(openapi, { prefix: "/openapi" });
+
+  // Dev-only routes
+  if (config.NODE_ENV !== "production") {
+    app.register(openapi, { prefix: "/openapi" });
+  }
 
   return app;
 };
