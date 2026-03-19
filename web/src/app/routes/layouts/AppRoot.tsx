@@ -8,7 +8,7 @@ function AppRoot() {
         height: 60,
       }}
     >
-      <AppShell.Header>
+      <AppShell.Header withBorder={false}>
         <Flex align="center" h="100%" ml="xl">
           <Title order={3}>slopornot</Title>
         </Flex>
