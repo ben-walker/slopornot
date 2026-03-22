@@ -1,14 +1,7 @@
-import { format } from "date-fns";
-import { useGetSetsDate } from "src/api/generated";
+import { GameContainer } from "src/features/game/components/GameContainer";
 
 function Game() {
-  const today = format(new Date(), "yyyy-MM-dd");
-
-  const { data } = useGetSetsDate(today);
-
-  console.log(today, data);
-
-  return <div />;
+  return <GameContainer />;
 }
 
 export { Game };

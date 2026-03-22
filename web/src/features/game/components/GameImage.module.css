@@ -1,0 +1,13 @@
+.card {
+  cursor: pointer;
+
+  .image {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    .image {
+      transform: scale(1.05);
+    }
+  }
+}
