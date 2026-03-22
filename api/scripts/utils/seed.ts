@@ -1,13 +1,13 @@
 import { addDays, format } from "date-fns";
 
-const generateAlternatingBooleans = (length: number): boolean[] => (
+const getAlternatingBooleans = (length: number): boolean[] => (
   [
     ...Array.from({ length: length / 2 }, () => true),
     ...Array.from({ length: length / 2 }, () => false),
   ]
 );
 
-const generateConsecutiveDates = (length: number) => (
+const getConsecutiveDates = (length: number) => (
   Array.from({ length }, (_, i) => {
     const date = addDays(new Date(), i);
 
@@ -15,7 +15,14 @@ const generateConsecutiveDates = (length: number) => (
   })
 );
 
+const getSeededImageUrl = () => {
+  const seed = crypto.randomUUID();
+
+  return `https://picsum.photos/seed/${seed}/800/600`;
+};
+
 export {
-  generateAlternatingBooleans,
-  generateConsecutiveDates,
+  getAlternatingBooleans,
+  getConsecutiveDates,
+  getSeededImageUrl,
 };
