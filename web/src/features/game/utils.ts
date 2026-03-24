@@ -22,6 +22,10 @@ const buildImagePairs = (images?: GetSetsDate200ImagesItem[]): ImagePair[] => {
   return aiImages.map((ai, index) => {
     const real = realImages[index];
 
+    if (!real) {
+      throw new Error(`Missing real image at index ${String(index)}`);
+    }
+
     const aiImage = buildImageEntry(ai);
     const realImage = buildImageEntry(real);
 

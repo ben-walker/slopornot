@@ -1,0 +1,17 @@
+.progress {
+  --color-pending: var(--mantine-color-gray-7);
+  --color-correct: var(--mantine-color-green-5);
+  --color-incorrect: var(--mantine-color-gray-7);
+
+  border-radius: 50%;
+  border: 2px solid var(--color-pending);
+
+  &[data-is-correct="true"] {
+    background-color: var(--color-correct);
+    border-color: var(--color-correct);
+  }
+
+  &[data-is-correct="false"] {
+    background-color: var(--color-incorrect);
+  }
+}

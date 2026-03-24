@@ -1,14 +1,19 @@
-import { Center, Flex, Stack, Title } from "@mantine/core";
-import type { ImageEntry, ImagePair } from "src/features/game/types";
+import { Center, Container, Flex, Stack, Title } from "@mantine/core";
+import type { Guess, ImageEntry, ImagePair } from "src/features/game/types";
 import { GamePair } from "./GamePair";
+import { GameProgress } from "./GameProgress";
 
 interface GameBoardProps {
+  guesses: Guess[];
   imagePair: ImagePair | undefined;
   onGuess: (image: ImageEntry) => void;
+  totalRounds: number;
 }
 
 function GameBoard({
+  guesses,
   imagePair,
+  totalRounds,
   onGuess,
 }: GameBoardProps) {
   return (
@@ -22,6 +27,12 @@ function GameBoard({
           />
         </Stack>
       </Center>
+      <Container mb="xl">
+        <GameProgress
+          guesses={guesses}
+          totalRounds={totalRounds}
+        />
+      </Container>
     </Flex>
   );
 }
