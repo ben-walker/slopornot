@@ -1,3 +1,13 @@
+interface Guess {
+  isCorrect: boolean;
+}
+
+interface Game {
+  guesses: Guess[];
+}
+
+type Games = Record<string, Game | undefined>;
+
 interface ImageEntry {
   id: string;
   storageUrl: string;
@@ -10,6 +20,9 @@ interface ImagePair {
 }
 
 export type {
+  Guess,
+  Game,
+  Games,
   ImageEntry,
   ImagePair,
 };

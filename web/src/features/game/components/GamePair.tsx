@@ -1,18 +1,26 @@
+import type { ImageEntry, ImagePair } from "src/features/game/types";
 import { GameImage } from "./GameImage";
 import { Group } from "@mantine/core";
-import type { ImagePair } from "src/features/game/types";
 
 interface GamePairProps {
   imagePair: ImagePair | undefined;
+  onGuess: (image: ImageEntry) => void;
 }
 
 function GamePair({
   imagePair,
+  onGuess,
 }: GamePairProps) {
   return (
     <Group>
-      <GameImage image={imagePair?.left} />
-      <GameImage image={imagePair?.right} />
+      <GameImage
+        image={imagePair?.left}
+        onGuess={onGuess}
+      />
+      <GameImage
+        image={imagePair?.right}
+        onGuess={onGuess}
+      />
     </Group>
   );
 }
