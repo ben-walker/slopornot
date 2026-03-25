@@ -27,7 +27,7 @@ function GameBoard({
           />
         </Stack>
       </Center>
-      <Container mb="xl">
+      <Container mb="xl" mt="sm">
         <GameProgress
           guesses={guesses}
           totalRounds={totalRounds}
