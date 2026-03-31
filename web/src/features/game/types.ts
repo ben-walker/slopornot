@@ -19,10 +19,13 @@ interface ImagePair {
   right: ImageEntry;
 }
 
+type PerformanceTier = "perfect" | "great" | "good" | "ok" | "poor" | "terrible";
+
 export type {
   Guess,
   Game,
   Games,
   ImageEntry,
   ImagePair,
+  PerformanceTier,
 };

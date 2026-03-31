@@ -1,6 +1,7 @@
 import type { Games, ImageEntry } from "src/features/game/types";
 import { useCallback, useMemo } from "react";
 import { GameBoard } from "./GameBoard";
+import { GameOver } from "./GameOver";
 import { STORAGE_KEY_GAME } from "src/features/game/constants";
 import { buildImagePairs } from "src/features/game/utils";
 import { format } from "date-fns";
@@ -24,6 +25,7 @@ function GameContainer() {
   const guesses = games[today]?.guesses ?? [];
   const totalRounds = imagePairs.length;
   const currentRoundIndex = guesses.length;
+  const isGameOver = totalRounds > 0 && currentRoundIndex >= totalRounds;
 
   const onGuess = useCallback((image: ImageEntry) => {
     setGames((prev) => {
@@ -39,12 +41,19 @@ function GameContainer() {
   }, [setGames, today]);
 
   return (
-    <GameBoard
-      guesses={guesses}
-      imagePair={imagePairs[currentRoundIndex]}
-      onGuess={onGuess}
-      totalRounds={totalRounds}
-    />
+    <>
+      <GameOver
+        guesses={guesses}
+        isOpen={isGameOver}
+        totalRounds={totalRounds}
+      />
+      <GameBoard
+        guesses={guesses}
+        imagePair={imagePairs[currentRoundIndex]}
+        onGuess={onGuess}
+        totalRounds={totalRounds}
+      />
+    </>
   );
 }
 

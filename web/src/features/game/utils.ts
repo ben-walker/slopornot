@@ -1,5 +1,6 @@
-import type { ImageEntry, ImagePair } from "./types";
+import type { ImageEntry, ImagePair, PerformanceTier } from "./types";
 import type { GetSetsDate200ImagesItem } from "src/api/generated";
+import { titleBuckets } from "./constants";
 
 const buildImageEntry = (image: GetSetsDate200ImagesItem): ImageEntry => ({
   id: image.id,
@@ -35,6 +36,33 @@ const buildImagePairs = (images?: GetSetsDate200ImagesItem[]): ImagePair[] => {
   });
 };
 
+const getBucketKey = (ratio: number): PerformanceTier => {
+  if (ratio === 1) {
+    return "perfect";
+  }
+  if (ratio >= 0.8) {
+    return "great";
+  }
+  if (ratio >= 0.6) {
+    return "good";
+  }
+  if (ratio >= 0.4) {
+    return "ok";
+  }
+  if (ratio >= 0.2) {
+    return "poor";
+  }
+  return "terrible";
+};
+
+const getTitle = (correctCount: number, totalRounds: number): string => {
+  const ratio = correctCount / totalRounds;
+  const bucket = titleBuckets[getBucketKey(ratio)];
+
+  return bucket[Math.floor(Math.random() * bucket.length)] ?? "Thanks for playing today!";
+};
+
 export {
   buildImagePairs,
+  getTitle,
 };
