@@ -3,6 +3,7 @@ import type { Guess } from "src/features/game/types";
 import { getTitle } from "src/features/game/utils";
 import { useIsMobile } from "src/hooks/useIsMobile";
 import { useMemo } from "react";
+import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
 interface GameOverProps {
   guesses: Guess[];
@@ -15,6 +16,7 @@ function GameOver({
   isOpen,
   totalRounds,
 }: GameOverProps) {
+  const timeUntilMidnight = useTimeUntilMidnight();
   const isMobile = useIsMobile();
 
   const correctCount = useMemo(() => (
@@ -48,6 +50,9 @@ function GameOver({
             {`You correctly spotted `}
             <Text span fw="bold">{`${String(correctCount)} / ${String(totalRounds)}`}</Text>
             {" bits of slop"}
+          </Text>
+          <Text>
+            {`Back soon ${timeUntilMidnight}`}
           </Text>
         </Stack>
       </Center>
