@@ -10,4 +10,14 @@
       transform: scale(1.05);
     }
   }
+
+  &[data-game-over="true"] {
+    cursor: default;
+
+    &:hover {
+      .image {
+        transform: none;
+      }
+    }
+  }
 }

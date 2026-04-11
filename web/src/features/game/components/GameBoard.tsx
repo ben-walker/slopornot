@@ -6,6 +6,7 @@ import { GameProgress } from "./GameProgress";
 interface GameBoardProps {
   guesses: Guess[];
   imagePair: ImagePair | undefined;
+  isGameOver: boolean;
   onGuess: (image: ImageEntry) => void;
   totalRounds: number;
 }
@@ -13,6 +14,7 @@ interface GameBoardProps {
 function GameBoard({
   guesses,
   imagePair,
+  isGameOver,
   totalRounds,
   onGuess,
 }: GameBoardProps) {
@@ -23,6 +25,7 @@ function GameBoard({
           <Title ta="center" order={4}>Which one is slop?</Title>
           <GamePair
             imagePair={imagePair}
+            isGameOver={isGameOver}
             onGuess={onGuess}
           />
         </Stack>

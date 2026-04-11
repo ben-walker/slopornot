@@ -5,25 +5,28 @@ import { useCallback } from "react";
 
 interface GameImageProps {
   image: ImageEntry | undefined;
+  isGameOver: boolean;
   onGuess: (image: ImageEntry) => void;
 }
 
 function GameImage({
   image,
+  isGameOver,
   onGuess,
 }: GameImageProps) {
   const handleClick = useCallback(() => {
-    if (!image) {
+    if (!image || isGameOver) {
       return;
     }
 
     onGuess(image);
-  }, [image, onGuess]);
+  }, [image, isGameOver, onGuess]);
 
   return (
     <Card
       className={classes.card}
       component="button"
+      data-game-over={isGameOver}
       onClick={handleClick}
       radius="md"
       shadow="md"

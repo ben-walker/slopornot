@@ -30,6 +30,7 @@ const buildImagePairs = (images?: GetSetsDate200ImagesItem[]): ImagePair[] => {
     const aiImage = buildImageEntry(ai);
     const realImage = buildImageEntry(real);
 
+    // TODO: could swap images if a re-render happens, make stable
     return Math.random() < 0.5
       ? { left: aiImage, right: realImage }
       : { left: realImage, right: aiImage };

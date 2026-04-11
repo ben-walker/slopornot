@@ -21,6 +21,7 @@ function GameContainer() {
       <GameBoard
         guesses={guesses}
         imagePair={currentPair}
+        isGameOver={isGameOver}
         onGuess={onGuess}
         totalRounds={totalRounds}
       />

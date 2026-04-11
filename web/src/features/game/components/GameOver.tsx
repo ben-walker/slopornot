@@ -1,8 +1,10 @@
 import { Center, Modal, Stack, Text, Title } from "@mantine/core";
+import { useEffect, useMemo } from "react";
 import type { Guess } from "src/features/game/types";
 import { getTitle } from "src/features/game/utils";
+import { useDisclosure } from "@mantine/hooks";
 import { useIsMobile } from "src/hooks/useIsMobile";
-import { useMemo } from "react";
+
 import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
 interface GameOverProps {
@@ -16,8 +18,16 @@ function GameOver({
   isOpen,
   totalRounds,
 }: GameOverProps) {
+  const [opened, { open, close }] = useDisclosure(false);
+
   const timeUntilMidnight = useTimeUntilMidnight();
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (isOpen) {
+      open();
+    }
+  }, [isOpen, open]);
 
   const correctCount = useMemo(() => (
     guesses.filter(guess => guess.isCorrect).length
@@ -30,18 +40,18 @@ function GameOver({
   return (
     <Modal
       centered
-      closeOnClickOutside={false}
-      closeOnEscape={false}
+      closeOnClickOutside
+      closeOnEscape
       fullScreen={isMobile}
-      onClose={() => { /* noop */ }}
-      opened={isOpen}
+      onClose={close}
+      opened={opened}
       size="auto"
       styles={{
         body: {
           height: "100%",
         },
       }}
-      withCloseButton={false}
+      withCloseButton
     >
       <Center h="100%">
         <Stack align="flex-start">
