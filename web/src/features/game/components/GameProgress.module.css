@@ -5,6 +5,11 @@
 
   border-radius: 50%;
   border: 2px solid var(--color-pending);
+  transition: transform 0.2s ease;
+
+  &[data-is-active="true"] {
+    transform: scale(1.4);
+  }
 
   &[data-is-correct="true"] {
     background-color: var(--color-correct);
@@ -13,5 +18,9 @@
 
   &[data-is-correct="false"] {
     background-color: var(--color-incorrect);
+  }
+
+  &[data-is-game-over="true"] {
+    cursor: pointer;
   }
 }

@@ -26,7 +26,7 @@ function GameImage({
     <Card
       className={classes.card}
       component="button"
-      data-game-over={isGameOver}
+      data-is-game-over={isGameOver}
       onClick={handleClick}
       radius="md"
       shadow="md"

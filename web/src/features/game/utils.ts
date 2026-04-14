@@ -56,6 +56,10 @@ const getBucketKey = (ratio: number): PerformanceTier => {
   return "terrible";
 };
 
+const clampImageIndex = (index: number, maximum: number) => {
+  return Math.max(0, Math.min(index, maximum - 1));
+};
+
 const getTitle = (correctCount: number, totalRounds: number): string => {
   const ratio = correctCount / totalRounds;
   const bucket = titleBuckets[getBucketKey(ratio)];
@@ -65,5 +69,6 @@ const getTitle = (correctCount: number, totalRounds: number): string => {
 
 export {
   buildImagePairs,
+  clampImageIndex,
   getTitle,
 };

@@ -11,7 +11,7 @@
     }
   }
 
-  &[data-game-over="true"] {
+  &[data-is-game-over="true"] {
     cursor: default;
 
     &:hover {

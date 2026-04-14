@@ -4,19 +4,23 @@ import { GamePair } from "./GamePair";
 import { GameProgress } from "./GameProgress";
 
 interface GameBoardProps {
+  activeIndex: number;
   guesses: Guess[];
   imagePair: ImagePair | undefined;
   isGameOver: boolean;
   onGuess: (image: ImageEntry) => void;
+  onNavigate: (index: number) => void;
   totalRounds: number;
 }
 
 function GameBoard({
+  activeIndex,
   guesses,
   imagePair,
   isGameOver,
-  totalRounds,
   onGuess,
+  onNavigate,
+  totalRounds,
 }: GameBoardProps) {
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column">
@@ -33,7 +37,10 @@ function GameBoard({
       <Container mb="xl" mt="sm">
         <GameProgress
           guesses={guesses}
+          isGameOver={isGameOver}
+          onNavigate={onNavigate}
           totalRounds={totalRounds}
+          activeIndex={activeIndex}
         />
       </Container>
     </Flex>

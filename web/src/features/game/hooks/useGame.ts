@@ -1,7 +1,7 @@
 import type { Games, ImageEntry } from "src/features/game/types";
+import { buildImagePairs, clampImageIndex } from "src/features/game/utils";
 import { useCallback, useMemo, useState } from "react";
 import { STORAGE_KEY_GAME } from "src/features/game/constants";
-import { buildImagePairs } from "src/features/game/utils";
 import { format } from "date-fns";
 import { useGetSetsDate } from "src/api/generated";
 import { useLocalStorage } from "@mantine/hooks";
@@ -26,8 +26,8 @@ function useGame() {
   const totalRounds = imagePairs.length;
   const completedRounds = guesses.length;
   const isGameOver = totalRounds > 0 && completedRounds >= totalRounds;
-  const effectiveIndex = isGameOver ? viewingIndex : completedRounds;
-  const currentPair = imagePairs[effectiveIndex];
+  const activeIndex = isGameOver ? viewingIndex : completedRounds;
+  const currentPair = imagePairs[activeIndex];
 
   const onGuess = useCallback((image: ImageEntry) => {
     setGames((prev) => {
@@ -40,15 +40,16 @@ function useGame() {
         },
       };
     });
-  }, [setGames, today]);
+
+    setViewingIndex(prev => clampImageIndex(prev + 1, totalRounds));
+  }, [setGames, today, totalRounds]);
 
   const onNavigate = useCallback((index: number) => {
-    const newViewingIndex = Math.max(0, Math.min(index, totalRounds - 1));
-
-    setViewingIndex(newViewingIndex);
+    setViewingIndex(clampImageIndex(index, totalRounds));
   }, [totalRounds]);
 
   return {
+    activeIndex,
     completedRounds,
     currentPair,
     guesses,
@@ -56,7 +57,6 @@ function useGame() {
     onGuess,
     onNavigate,
     totalRounds,
-    viewingIndex,
   };
 }
 
