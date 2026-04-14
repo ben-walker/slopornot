@@ -8,6 +8,17 @@ const buildImageEntry = (image: GetSetsDate200ImagesItem): ImageEntry => ({
   storageUrl: image.storage_url,
 });
 
+const hashPair = (idA: string, idB: string) => {
+  const str = idA + idB;
+  let hash = 5381;
+
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33) ^ str.charCodeAt(i);
+  }
+
+  return hash;
+};
+
 const buildImagePairs = (images?: GetSetsDate200ImagesItem[]): ImagePair[] => {
   if (!images?.length) {
     return [];
@@ -30,8 +41,7 @@ const buildImagePairs = (images?: GetSetsDate200ImagesItem[]): ImagePair[] => {
     const aiImage = buildImageEntry(ai);
     const realImage = buildImageEntry(real);
 
-    // TODO: could swap images if a re-render happens, make stable
-    return Math.random() < 0.5
+    return hashPair(aiImage.id, realImage.id) % 2 === 0
       ? { left: aiImage, right: realImage }
       : { left: realImage, right: aiImage };
   });
