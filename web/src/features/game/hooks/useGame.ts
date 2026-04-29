@@ -37,6 +37,7 @@ function useGame() {
         ...prev,
         [today]: {
           guesses: [...prevTodayGuesses, { isCorrect: image.isAi }],
+          totalRounds,
         },
       };
     });

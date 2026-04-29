@@ -4,6 +4,7 @@ interface Guess {
 
 interface Game {
   guesses: Guess[];
+  totalRounds: number;
 }
 
 type Games = Record<string, Game | undefined>;
