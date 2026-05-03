@@ -5,6 +5,7 @@ import { useGame } from "src/features/game/hooks/useGame";
 function GameContainer() {
   const {
     activeIndex,
+    averageCorrect,
     currentPair,
     guesses,
     isGameOver,
@@ -16,6 +17,7 @@ function GameContainer() {
   return (
     <>
       <GameOver
+        averageCorrect={averageCorrect}
         guesses={guesses}
         isOpen={isGameOver}
         totalRounds={totalRounds}

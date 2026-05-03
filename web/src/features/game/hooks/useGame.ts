@@ -2,12 +2,12 @@ import type { Games, ImageEntry } from "src/features/game/types";
 import { buildImagePairs, clampImageIndex } from "src/features/game/utils";
 import { useCallback, useMemo, useState } from "react";
 import { STORAGE_KEY_GAME } from "src/features/game/constants";
-import { format } from "date-fns";
 import { useGetSetsDate } from "src/api/generated";
 import { useLocalStorage } from "@mantine/hooks";
+import { useToday } from "src/hooks/useToday";
 
 function useGame() {
-  const today = format(new Date(), "yyyy-MM-dd");
+  const today = useToday();
 
   const { data } = useGetSetsDate(today);
 
@@ -28,6 +28,26 @@ function useGame() {
   const isGameOver = totalRounds > 0 && completedRounds >= totalRounds;
   const activeIndex = isGameOver ? viewingIndex : completedRounds;
   const currentPair = imagePairs[activeIndex];
+
+  const averageCorrect = useMemo(() => {
+    const completedGames = Object.values(games).filter(
+      game => game !== undefined && game.guesses.length === game.totalRounds,
+    );
+
+    if (!completedGames.length) {
+      return 0;
+    }
+
+    const correctRateSum = completedGames.reduce((sum, game) => {
+      if (game === undefined) {
+        return sum;
+      }
+
+      return sum + game.guesses.filter(guess => guess.isCorrect).length / game.totalRounds;
+    }, 0);
+
+    return correctRateSum / completedGames.length;
+  }, [games]);
 
   const onGuess = useCallback((image: ImageEntry) => {
     setGames((prev) => {
@@ -51,6 +71,7 @@ function useGame() {
 
   return {
     activeIndex,
+    averageCorrect,
     completedRounds,
     currentPair,
     guesses,
