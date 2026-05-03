@@ -1,7 +1,8 @@
-import { Center, Container, Flex, Stack, Title } from "@mantine/core";
+import { Button, Center, Container, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import type { Guess, ImageEntry, ImagePair } from "src/features/game/types";
 import { GamePair } from "./GamePair";
 import { GameProgress } from "./GameProgress";
+import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
 interface GameBoardProps {
   activeIndex: number;
@@ -10,6 +11,7 @@ interface GameBoardProps {
   isGameOver: boolean;
   onGuess: (image: ImageEntry) => void;
   onNavigate: (index: number) => void;
+  onShowResults: () => void;
   totalRounds: number;
 }
 
@@ -20,8 +22,11 @@ function GameBoard({
   isGameOver,
   onGuess,
   onNavigate,
+  onShowResults,
   totalRounds,
 }: GameBoardProps) {
+  const timeUntilMidnight = useTimeUntilMidnight();
+
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column">
       <Center flex={1}>
@@ -35,13 +40,25 @@ function GameBoard({
         </Stack>
       </Center>
       <Container mb="xl" mt="sm">
-        <GameProgress
-          guesses={guesses}
-          isGameOver={isGameOver}
-          onNavigate={onNavigate}
-          totalRounds={totalRounds}
-          activeIndex={activeIndex}
-        />
+        <Stack gap="lg" align="center">
+          {isGameOver && (
+            <Group justify="space-between">
+              <Text size="sm" c="dimmed" style={{ fontVariantNumeric: "tabular-nums" }}>
+                {`Back in ${timeUntilMidnight}`}
+              </Text>
+              <Button variant="default" size="xs" onClick={onShowResults}>
+                Results
+              </Button>
+            </Group>
+          )}
+          <GameProgress
+            guesses={guesses}
+            isGameOver={isGameOver}
+            onNavigate={onNavigate}
+            totalRounds={totalRounds}
+            activeIndex={activeIndex}
+          />
+        </Stack>
       </Container>
     </Flex>
   );

@@ -1,5 +1,7 @@
 import { GameBoard } from "./GameBoard";
-import { GameOver } from "./GameOver";
+import { GameResultsModal } from "./GameResultsModal";
+import { useDisclosure } from "@mantine/hooks";
+import { useEffect } from "react";
 import { useGame } from "src/features/game/hooks/useGame";
 
 function GameContainer() {
@@ -14,12 +16,21 @@ function GameContainer() {
     totalRounds,
   } = useGame();
 
+  const [isResultsOpen, { open: openResults, close: closeResults }] = useDisclosure(false);
+
+  useEffect(() => {
+    if (isGameOver) {
+      openResults();
+    }
+  }, [isGameOver, openResults]);
+
   return (
     <>
-      <GameOver
+      <GameResultsModal
         averageCorrect={averageCorrect}
         guesses={guesses}
-        isOpen={isGameOver}
+        isOpen={isResultsOpen}
+        onClose={closeResults}
         totalRounds={totalRounds}
       />
       <GameBoard
@@ -29,6 +40,7 @@ function GameContainer() {
         isGameOver={isGameOver}
         onGuess={onGuess}
         onNavigate={onNavigate}
+        onShowResults={openResults}
         totalRounds={totalRounds}
       />
     </>

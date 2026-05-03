@@ -1,30 +1,23 @@
 import { Card, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
-import { useEffect, useMemo } from "react";
 import type { Guess } from "src/features/game/types";
 import { getTitle } from "src/features/game/utils";
-import { useDisclosure } from "@mantine/hooks";
+import { useMemo } from "react";
 
-interface GameOverProps {
+interface GameResultsModalProps {
   averageCorrect: number;
   guesses: Guess[];
   isOpen: boolean;
+  onClose: () => void;
   totalRounds: number;
 }
 
-function GameOver({
+function GameResultsModal({
   averageCorrect,
   guesses,
   isOpen,
+  onClose,
   totalRounds,
-}: GameOverProps) {
-  const [opened, { open, close }] = useDisclosure(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      open();
-    }
-  }, [isOpen, open]);
-
+}: GameResultsModalProps) {
   const correctCount = useMemo(() => (
     guesses.filter(guess => guess.isCorrect).length
   ), [guesses]);
@@ -49,8 +42,8 @@ function GameOver({
       centered
       closeOnClickOutside
       closeOnEscape
-      onClose={close}
-      opened={opened}
+      onClose={onClose}
+      opened={isOpen}
       size="sm"
       withCloseButton={false}
     >
@@ -71,4 +64,4 @@ function GameOver({
   );
 }
 
-export { GameOver };
+export { GameResultsModal };
