@@ -1,10 +1,8 @@
-import { Center, Modal, Stack, Text } from "@mantine/core";
+import { Card, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useMemo } from "react";
 import type { Guess } from "src/features/game/types";
 import { getTitle } from "src/features/game/utils";
 import { useDisclosure } from "@mantine/hooks";
-
-import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
 interface GameOverProps {
   averageCorrect: number;
@@ -21,8 +19,6 @@ function GameOver({
 }: GameOverProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const timeUntilMidnight = useTimeUntilMidnight();
-
   useEffect(() => {
     if (isOpen) {
       open();
@@ -37,6 +33,17 @@ function GameOver({
     getTitle(correctCount, totalRounds)
   ), [correctCount, totalRounds]);
 
+  const resultCards = useMemo(() => [
+    {
+      content: `${String(correctCount)} / ${String(totalRounds)}`,
+      label: "Today",
+    },
+    {
+      content: <NumberFormatter decimalScale={0} suffix="%" value={averageCorrect * 100} />,
+      label: "Average",
+    },
+  ], [averageCorrect, correctCount, totalRounds]);
+
   return (
     <Modal
       centered
@@ -44,27 +51,22 @@ function GameOver({
       closeOnEscape
       onClose={close}
       opened={opened}
-      size="auto"
-      styles={{
-        body: {
-          height: "100%",
-        },
-      }}
+      size="sm"
       withCloseButton={false}
     >
-      <Center h="100%">
-        <Stack align="flex-start">
-          <Text fw="bold">{title}</Text>
-          <Text>
-            {`You correctly spotted `}
-            <Text span fw="bold">{`${String(correctCount)} / ${String(totalRounds)}`}</Text>
-            {" bits of slop"}
-          </Text>
-          <Text>
-            {`Back in ${timeUntilMidnight}`}
-          </Text>
-        </Stack>
-      </Center>
+      <Stack gap="md">
+        <Title order={3}>{title}</Title>
+        <Group grow>
+          {resultCards.map(({ content, label }) => (
+            <Card withBorder padding="md" ta="center" key={label}>
+              <Text size="xs" c="dimmed">{label}</Text>
+              <Text size="xl" fw="bold">
+                {content}
+              </Text>
+            </Card>
+          ))}
+        </Group>
+      </Stack>
     </Modal>
   );
 }
