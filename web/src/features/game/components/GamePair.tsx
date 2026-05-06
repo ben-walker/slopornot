@@ -14,7 +14,7 @@ function GamePair({
   onGuess,
 }: GamePairProps) {
   return (
-    <Group>
+    <Group w="100%" gap="md" justify="center" align="center" wrap="nowrap">
       <GameImage
         image={imagePair?.left}
         isGameOver={isGameOver}

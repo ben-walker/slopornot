@@ -28,17 +28,15 @@ function GameImage({
       component="button"
       data-is-game-over={isGameOver}
       onClick={handleClick}
+      p={0}
       radius="md"
       shadow="md"
       withBorder
     >
-      <Card.Section>
-        <Image
-          className={classes.image}
-          h={300}
-          src={image?.storageUrl}
-        />
-      </Card.Section>
+      <Image
+        className={classes.image}
+        src={image?.storageUrl}
+      />
     </Card>
   );
 }

@@ -1,7 +1,8 @@
-import { Button, Center, Container, Flex, Group, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Container, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import type { Guess, ImageEntry, ImagePair } from "src/features/game/types";
 import { GamePair } from "./GamePair";
 import { GameProgress } from "./GameProgress";
+import classes from "./GameBoard.module.css";
 import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
 interface GameBoardProps {
@@ -29,8 +30,8 @@ function GameBoard({
 
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column">
-      <Center flex={1}>
-        <Stack>
+      <Box className={classes.pairArea} flex={1} mih={0} p="md">
+        <Stack h="100%" gap="sm" align="center" justify="center">
           <Title ta="center" order={4}>Which one is slop?</Title>
           <GamePair
             imagePair={imagePair}
@@ -38,12 +39,12 @@ function GameBoard({
             onGuess={onGuess}
           />
         </Stack>
-      </Center>
+      </Box>
       <Container mb="xl" mt="sm">
         <Stack gap="lg" align="center">
           {isGameOver && (
             <Group justify="space-between">
-              <Text size="sm" c="dimmed" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <Text className={classes.countdownText} size="sm" c="dimmed">
                 {`Back in ${timeUntilMidnight}`}
               </Text>
               <Button variant="default" size="xs" onClick={onShowResults}>

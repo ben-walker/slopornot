@@ -1,0 +1,7 @@
+.pairArea {
+  container-type: size;
+}
+
+.countdownText {
+  font-variant-numeric: tabular-nums;
+}
