@@ -1,23 +1,23 @@
-.progress {
-  --color-pending: var(--mantine-color-gray-7);
-  --color-correct: var(--mantine-color-green-5);
-  --color-incorrect: var(--mantine-color-gray-7);
-
+.step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  border: 2px solid var(--color-pending);
-  transition: transform 0.2s ease;
-
-  &[data-is-active="true"] {
-    transform: scale(1.4);
-  }
+  background-color: var(--mantine-color-gray-7);
+  color: var(--mantine-color-white);
+  transition: background-color 0.2s ease;
 
   &[data-is-correct="true"] {
-    background-color: var(--color-correct);
-    border-color: var(--color-correct);
+    background-color: var(--mantine-color-blue-5);
   }
 
   &[data-is-correct="false"] {
-    background-color: var(--color-incorrect);
+    background-color: var(--mantine-color-gray-7);
+  }
+
+  &[data-is-active="true"] {
+    outline: 2px solid var(--mantine-color-blue-5);
+    outline-offset: 2px;
   }
 
   &[data-is-game-over="true"] {

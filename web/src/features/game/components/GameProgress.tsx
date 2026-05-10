@@ -1,8 +1,10 @@
 import { Box, Group } from "@mantine/core";
+import { CheckIcon, XIcon } from "@phosphor-icons/react";
 import type { Guess } from "src/features/game/types";
 import classes from "./GameProgress.module.css";
 
-const PROGRESS_SIZE = 20;
+const PROGRESS_SIZE = 28;
+const ICON_SIZE = 16;
 
 interface GameProgressProps {
   activeIndex: number;
@@ -36,14 +38,20 @@ function GameProgress({
           <Box
             // eslint-disable-next-line react-x/no-array-index-key
             key={index}
-            className={classes.progress}
+            className={classes.step}
             data-is-active={index === activeIndex}
             data-is-correct={guess?.isCorrect}
             data-is-game-over={isGameOver}
             h={PROGRESS_SIZE}
             onClick={onClick(index)}
             w={PROGRESS_SIZE}
-          />
+          >
+            {guess !== undefined && (
+              guess.isCorrect
+                ? <CheckIcon size={ICON_SIZE} weight="bold" />
+                : <XIcon size={ICON_SIZE} weight="bold" />
+            )}
+          </Box>
         );
       })}
     </Group>
