@@ -1,4 +1,4 @@
-import type { Games, ImageEntry } from "src/features/game/types";
+import type { Games, HistoryEntry, ImageEntry } from "src/features/game/types";
 import { buildImagePairs, clampImageIndex } from "src/features/game/utils";
 import { useCallback, useMemo, useState } from "react";
 import { STORAGE_KEY_GAME } from "src/features/game/constants";
@@ -30,25 +30,27 @@ function useGame() {
   const currentPair = imagePairs[activeIndex];
   const currentGuess = guesses[activeIndex];
 
-  const averageCorrect = useMemo(() => {
-    const completedGames = Object.values(games).filter(
-      game => game !== undefined && game.guesses.length === game.totalRounds,
-    );
+  const history = useMemo<HistoryEntry[]>(() => {
+    return Object.entries(games)
+      .flatMap(([date, game]) => {
+        if (game === undefined || game.guesses.length !== game.totalRounds) {
+          return [];
+        }
 
-    if (!completedGames.length) {
+        const correct = game.guesses.filter(guess => guess.isCorrect).length;
+
+        return [{ accuracy: (correct / game.totalRounds) * 100, date }];
+      })
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [games]);
+
+  const averageCorrect = useMemo(() => {
+    if (!history.length) {
       return 0;
     }
 
-    const correctRateSum = completedGames.reduce((sum, game) => {
-      if (game === undefined) {
-        return sum;
-      }
-
-      return sum + game.guesses.filter(guess => guess.isCorrect).length / game.totalRounds;
-    }, 0);
-
-    return correctRateSum / completedGames.length;
-  }, [games]);
+    return history.reduce((sum, entry) => sum + entry.accuracy, 0) / history.length / 100;
+  }, [history]);
 
   const onGuess = useCallback((image: ImageEntry) => {
     setGames((prev) => {
@@ -77,6 +79,7 @@ function useGame() {
     currentGuess,
     currentPair,
     guesses,
+    history,
     isGameOver,
     onGuess,
     onNavigate,

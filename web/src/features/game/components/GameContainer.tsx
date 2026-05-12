@@ -11,6 +11,7 @@ function GameContainer() {
     currentGuess,
     currentPair,
     guesses,
+    history,
     isGameOver,
     onGuess,
     onNavigate,
@@ -30,6 +31,7 @@ function GameContainer() {
       <GameResultsModal
         averageCorrect={averageCorrect}
         guesses={guesses}
+        history={history}
         isOpen={isResultsOpen}
         onClose={closeResults}
         totalRounds={totalRounds}

@@ -21,12 +21,18 @@ interface ImagePair {
   right: ImageEntry;
 }
 
+interface HistoryEntry {
+  accuracy: number;
+  date: string;
+}
+
 type PerformanceTier = "perfect" | "great" | "good" | "ok" | "poor" | "terrible";
 
 export type {
   Guess,
   Game,
   Games,
+  HistoryEntry,
   ImageEntry,
   ImagePair,
   PerformanceTier,

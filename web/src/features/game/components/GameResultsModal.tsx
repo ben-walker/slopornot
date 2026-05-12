@@ -1,11 +1,17 @@
 import { Card, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
-import type { Guess } from "src/features/game/types";
+import type { Guess, HistoryEntry } from "src/features/game/types";
+import { format, parse } from "date-fns";
+import { LineChart } from "@mantine/charts";
 import { getTitle } from "src/features/game/utils";
 import { useMemo } from "react";
+
+const DATE_KEY = "date" satisfies keyof HistoryEntry;
+const ACCURACY_KEY = "accuracy" satisfies keyof HistoryEntry;
 
 interface GameResultsModalProps {
   averageCorrect: number;
   guesses: Guess[];
+  history: HistoryEntry[];
   isOpen: boolean;
   onClose: () => void;
   totalRounds: number;
@@ -14,6 +20,7 @@ interface GameResultsModalProps {
 function GameResultsModal({
   averageCorrect,
   guesses,
+  history,
   isOpen,
   onClose,
   totalRounds,
@@ -59,6 +66,33 @@ function GameResultsModal({
             </Card>
           ))}
         </Group>
+        {history.length > 0 && (
+          <Stack gap="xs">
+            <Text size="md" fw="bold">Accuracy over time</Text>
+            <LineChart
+              curveType="monotone"
+              data={history}
+              dataKey={DATE_KEY}
+              gradientStops={[
+                { color: "blue.5", offset: 0 },
+                { color: "gray.7", offset: 100 },
+              ]}
+              h={200}
+              series={[{ name: ACCURACY_KEY, label: "Accuracy" }]}
+              strokeWidth={5}
+              type="gradient"
+              valueFormatter={value => `${String(value)}%`}
+              withDots
+              withTooltip={false}
+              xAxisProps={{
+                tickFormatter: (date: string) => {
+                  return format(parse(date, "yyyy-MM-dd", new Date()), "MMM d");
+                },
+              }}
+              yAxisProps={{ domain: [0, 100] }}
+            />
+          </Stack>
+        )}
       </Stack>
     </Modal>
   );
