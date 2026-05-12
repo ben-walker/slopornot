@@ -32,4 +32,9 @@
       }
     }
   }
+
+  &[data-is-selected="true"] {
+    outline: 4px solid var(--mantine-color-bright);
+    outline-offset: -4px;
+  }
 }

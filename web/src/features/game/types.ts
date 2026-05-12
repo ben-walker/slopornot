@@ -1,5 +1,6 @@
 interface Guess {
   isCorrect: boolean;
+  selectedImageId: string;
 }
 
 interface Game {

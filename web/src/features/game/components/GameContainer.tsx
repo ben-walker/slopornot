@@ -8,6 +8,7 @@ function GameContainer() {
   const {
     activeIndex,
     averageCorrect,
+    currentGuess,
     currentPair,
     guesses,
     isGameOver,
@@ -35,6 +36,7 @@ function GameContainer() {
       />
       <GameBoard
         activeIndex={activeIndex}
+        currentGuess={currentGuess}
         guesses={guesses}
         imagePair={currentPair}
         isGameOver={isGameOver}

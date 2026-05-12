@@ -7,6 +7,7 @@ import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
 interface GameBoardProps {
   activeIndex: number;
+  currentGuess: Guess | undefined;
   guesses: Guess[];
   imagePair: ImagePair | undefined;
   isGameOver: boolean;
@@ -18,6 +19,7 @@ interface GameBoardProps {
 
 function GameBoard({
   activeIndex,
+  currentGuess,
   guesses,
   imagePair,
   isGameOver,
@@ -34,6 +36,7 @@ function GameBoard({
         <Stack h="100%" gap="sm" align="center" justify="center">
           <Title ta="center" order={4}>Which one is slop?</Title>
           <GamePair
+            guess={currentGuess}
             imagePair={imagePair}
             isGameOver={isGameOver}
             onGuess={onGuess}

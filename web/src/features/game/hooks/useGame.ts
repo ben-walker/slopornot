@@ -28,6 +28,7 @@ function useGame() {
   const isGameOver = totalRounds > 0 && completedRounds >= totalRounds;
   const activeIndex = isGameOver ? viewingIndex : completedRounds;
   const currentPair = imagePairs[activeIndex];
+  const currentGuess = guesses[activeIndex];
 
   const averageCorrect = useMemo(() => {
     const completedGames = Object.values(games).filter(
@@ -56,7 +57,7 @@ function useGame() {
       return {
         ...prev,
         [today]: {
-          guesses: [...prevTodayGuesses, { isCorrect: image.isAi }],
+          guesses: [...prevTodayGuesses, { isCorrect: image.isAi, selectedImageId: image.id }],
           totalRounds,
         },
       };
@@ -73,6 +74,7 @@ function useGame() {
     activeIndex,
     averageCorrect,
     completedRounds,
+    currentGuess,
     currentPair,
     guesses,
     isGameOver,
