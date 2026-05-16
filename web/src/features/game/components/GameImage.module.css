@@ -35,6 +35,22 @@
 
   &[data-is-selected="true"] {
     outline: 4px solid var(--mantine-color-bright);
-    outline-offset: -4px;
+  }
+}
+
+.label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--mantine-spacing-sm);
+  text-align: center;
+
+  &[data-is-correct="true"] {
+    background-color: var(--mantine-color-blue-5);
+  }
+
+  &[data-is-correct="false"] {
+    background-color: var(--mantine-color-gray-7);
   }
 }

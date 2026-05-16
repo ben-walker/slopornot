@@ -34,7 +34,7 @@ function GameBoard({
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column">
       <Box className={classes.pairArea} flex={1} mih={0} p="md">
         <Stack h="100%" gap="sm" align="center" justify="center">
-          <Title ta="center" order={4}>Which one is slop?</Title>
+          <Title ta="center" order={4}>Which image is AI generated?</Title>
           <GamePair
             guess={currentGuess}
             imagePair={imagePair}
