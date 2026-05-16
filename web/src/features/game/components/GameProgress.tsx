@@ -48,8 +48,8 @@ function GameProgress({
           >
             {guess !== undefined && (
               guess.isCorrect
-                ? <CheckIcon size={ICON_SIZE} weight="bold" />
-                : <XIcon size={ICON_SIZE} weight="bold" />
+                ? <CheckIcon className={classes.icon} size={ICON_SIZE} weight="bold" />
+                : <XIcon className={classes.icon} size={ICON_SIZE} weight="bold" />
             )}
           </Box>
         );

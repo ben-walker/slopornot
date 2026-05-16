@@ -1,11 +1,13 @@
 .step {
+  --transition-duration: 0.6s;
+
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background-color: var(--mantine-color-incorrect-filled);
   color: var(--mantine-color-white);
-  transition: background-color 0.2s ease;
+  transition: background-color var(--transition-duration) ease;
 
   &[data-is-correct="true"] {
     background-color: var(--mantine-color-correct-filled);
@@ -23,4 +25,13 @@
   &[data-is-game-over="true"] {
     cursor: pointer;
   }
+
+  .icon {
+    animation: fade-in var(--transition-duration) ease;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
