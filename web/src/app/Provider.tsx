@@ -1,8 +1,15 @@
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
+import { DEFAULT_THEME, MantineProvider, createTheme } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router";
-import { MantineProvider } from "@mantine/core";
+
+const theme = createTheme({
+  colors: {
+    correct: DEFAULT_THEME.colors.blue,
+    incorrect: DEFAULT_THEME.colors.gray,
+  },
+});
 
 const queryClient = new QueryClient();
 
@@ -15,7 +22,7 @@ function Provider({
 }: ProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider defaultColorScheme="auto">
+      <MantineProvider defaultColorScheme="auto" theme={theme}>
         <BrowserRouter>
           {children}
         </BrowserRouter>

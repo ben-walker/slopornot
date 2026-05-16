@@ -3,20 +3,20 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: var(--mantine-color-gray-7);
+  background-color: var(--mantine-color-incorrect-filled);
   color: var(--mantine-color-white);
   transition: background-color 0.2s ease;
 
   &[data-is-correct="true"] {
-    background-color: var(--mantine-color-blue-5);
+    background-color: var(--mantine-color-correct-filled);
   }
 
   &[data-is-correct="false"] {
-    background-color: var(--mantine-color-gray-7);
+    background-color: var(--mantine-color-incorrect-filled);
   }
 
   &[data-is-active="true"] {
-    outline: 2px solid var(--mantine-color-blue-5);
+    outline: 2px solid var(--mantine-color-correct-filled);
     outline-offset: 2px;
   }
 

@@ -74,8 +74,8 @@ function GameResultsModal({
               data={history}
               dataKey={DATE_KEY}
               gradientStops={[
-                { color: "blue.5", offset: 0 },
-                { color: "gray.7", offset: 100 },
+                { color: "correct", offset: 0 },
+                { color: "incorrect", offset: 100 },
               ]}
               h={200}
               series={[{ name: ACCURACY_KEY, label: "Accuracy" }]}
