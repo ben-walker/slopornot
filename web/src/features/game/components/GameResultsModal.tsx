@@ -55,7 +55,7 @@ function GameResultsModal({
       withCloseButton={false}
     >
       <Stack gap="md">
-        <Title order={3}>{title}</Title>
+        <Title order={4}>{title}</Title>
         <Group grow>
           {resultCards.map(({ content, label }) => (
             <Card withBorder padding="md" ta="center" key={label}>
