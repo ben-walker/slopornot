@@ -1,6 +1,7 @@
 .card {
   --title-reservation: 2.5rem;
 
+  border: 0;
   aspect-ratio: 4 / 3;
   /* Pick the smaller of horizontal-fit vs vertical-fit so 4:3 holds on any viewport. */
   width: min(
@@ -34,7 +35,7 @@
   }
 
   &[data-is-selected="true"] {
-    outline: 4px solid var(--mantine-color-bright);
+    outline: 6px solid var(--mantine-color-bright);
   }
 }
 

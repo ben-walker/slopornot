@@ -39,7 +39,6 @@ function GameImage({
       p={0}
       radius="md"
       shadow="md"
-      withBorder
     >
       <Image
         className={classes.image}
