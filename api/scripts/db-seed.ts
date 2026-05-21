@@ -2,7 +2,7 @@ import * as schema from "src/db/schema";
 import {
   getAlternatingBooleans,
   getConsecutiveDates,
-  getSeededImageUrl,
+  getSeededImageKey,
 } from "./utils/seed";
 import { reset, seed } from "drizzle-seed";
 import { config } from "src/config";
@@ -32,7 +32,7 @@ await db.insert(schema.images).values(
   sets.flatMap(set => getAlternatingBooleans(ENTITY_COUNT).map(is_ai => ({
     is_ai,
     set_id: set.id,
-    storage_url: getSeededImageUrl(),
+    storage_key: getSeededImageKey(),
   }))),
 );
 

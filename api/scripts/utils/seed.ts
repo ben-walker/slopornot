@@ -15,14 +15,14 @@ const getConsecutiveDates = (length: number) => (
   })
 );
 
-const getSeededImageUrl = () => {
-  const seed = crypto.randomUUID();
-
-  return `https://picsum.photos/seed/${seed}/800/600`;
-};
+/**
+ * Shaped to pair with IMAGE_PUBLIC_URL=https://picsum.photos/seed in local dev,
+ * so the assembled URL resolves to a real Picsum image.
+ */
+const getSeededImageKey = () => `${crypto.randomUUID()}/800/600`;
 
 export {
   getAlternatingBooleans,
   getConsecutiveDates,
-  getSeededImageUrl,
+  getSeededImageKey,
 };

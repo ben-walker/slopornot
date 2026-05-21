@@ -5,9 +5,14 @@ import { createSelectSchema } from "drizzle-orm/typebox";
 const Set = createSelectSchema(sets);
 const Image = createSelectSchema(images);
 
+const ImageResponse = Type.Intersect([
+  Type.Omit(Image, ["storage_key"]),
+  Type.Object({ storage_url: Type.String() }),
+]);
+
 const SetWithImages = Type.Object({
   ...Set.properties,
-  images: Type.Array(Image),
+  images: Type.Array(ImageResponse),
 });
 
 export { SetWithImages };

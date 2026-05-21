@@ -1,6 +1,7 @@
 import type { FastifyPluginCallbackTypebox } from "@fastify/type-provider-typebox";
 import { SetWithImages } from "./schemas";
 import { Type } from "@fastify/type-provider-typebox";
+import { config } from "src/config";
 
 const sets: FastifyPluginCallbackTypebox = (app) => {
   app.get("/:date", {
@@ -30,7 +31,13 @@ const sets: FastifyPluginCallbackTypebox = (app) => {
       return reply.notFound();
     }
 
-    return set;
+    return {
+      ...set,
+      images: set.images.map(({ storage_key, ...image }) => ({
+        ...image,
+        storage_url: `${config.IMAGE_PUBLIC_URL}/${storage_key}`,
+      })),
+    };
   });
 };
 

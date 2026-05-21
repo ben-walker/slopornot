@@ -17,7 +17,7 @@ const sets = pgTable("sets", {
 const images = pgTable("images", {
   id: uuid("id").primaryKey().defaultRandom(),
   set_id: uuid("set_id").references(() => sets.id).notNull(),
-  storage_url: text("storage_url").notNull(),
+  storage_key: text("storage_key").notNull(),
   is_ai: boolean("is_ai").notNull(),
   created_at: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });

@@ -4,6 +4,7 @@ import { Value } from "typebox/value";
 const Config = Type.Object({
   DATABASE_URL: Type.String(),
   HOST: Type.String({ default: "0.0.0.0" }),
+  IMAGE_PUBLIC_URL: Type.String(),
   PORT: Type.Number({ default: 3000 }),
   NODE_ENV: Type.Enum(["development", "production"], { default: "development" }),
 });

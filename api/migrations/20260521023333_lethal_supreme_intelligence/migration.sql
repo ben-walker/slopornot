@@ -1,0 +1,1 @@
+ALTER TABLE "images" RENAME COLUMN "storage_url" TO "storage_key";
