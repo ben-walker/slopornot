@@ -1,4 +1,5 @@
-import { Card, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
+import { Button, Card, CopyButton, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
+import { CheckIcon, ShareIcon } from "@phosphor-icons/react";
 import type { Guess, HistoryEntry } from "src/features/game/types";
 import { format, parse } from "date-fns";
 import { LineChart } from "@mantine/charts";
@@ -7,6 +8,8 @@ import { useMemo } from "react";
 
 const DATE_KEY = "date" satisfies keyof HistoryEntry;
 const ACCURACY_KEY = "accuracy" satisfies keyof HistoryEntry;
+const COPY_BUTTON_TIMEOUT = 1500;
+const ICON_SIZE = 16;
 
 interface GameResultsModalProps {
   averageCorrect: number;
@@ -44,6 +47,13 @@ function GameResultsModal({
     },
   ], [averageCorrect, correctCount, totalRounds]);
 
+  const shareText = useMemo(() => {
+    const dots = guesses.map(guess => (guess.isCorrect ? "🔵" : "⚫")).join("");
+    const today = format(new Date(), "MMM d, yyyy");
+
+    return `slopornot • ${today} • ${String(correctCount)}/${String(totalRounds)}\n\n${dots}`;
+  }, [correctCount, guesses, totalRounds]);
+
   return (
     <Modal
       centered
@@ -66,6 +76,18 @@ function GameResultsModal({
             </Card>
           ))}
         </Group>
+        <CopyButton timeout={COPY_BUTTON_TIMEOUT} value={shareText}>
+          {({ copied, copy }) => (
+            <Button
+              color={copied ? "teal" : "blue"}
+              fullWidth
+              onClick={copy}
+              rightSection={copied ? <CheckIcon size={ICON_SIZE} weight="bold" /> : <ShareIcon size={ICON_SIZE} weight="bold" />}
+            >
+              {copied ? "Copied to clipboard" : "Share"}
+            </Button>
+          )}
+        </CopyButton>
         {history.length > 0 && (
           <Stack gap="xs">
             <Text size="md" fw="bold">Accuracy over time</Text>
