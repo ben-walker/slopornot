@@ -23,6 +23,12 @@ await seed(db, schema).refine(funcs => ({
       date: funcs.valuesFromArray({ values: getConsecutiveDates(ENTITY_COUNT) }),
     },
   },
+  // Skip seeding images here — they're inserted manually below to guarantee
+  // an even AI/real split per set. Without this, drizzle-seed auto-creates
+  // its own images on top of the manual insert.
+  images: {
+    count: 0,
+  },
 }));
 
 // Manually insert images to guarantee an even split of AI and real images per set,
