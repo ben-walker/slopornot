@@ -8,10 +8,11 @@ import { fal } from "@ai-sdk/fal";
 import { generateImage } from "ai";
 import ky from "ky";
 import { parseArgs } from "node:util";
+import sharp from "sharp";
 
 const Config = Type.Object({
   DATABASE_URL: Type.String(),
-  PEXELS_API_KEY: Type.String(),
+  UNSPLASH_API_KEY: Type.String(),
   FAL_API_KEY: Type.String(),
   R2_ACCOUNT_ID: Type.String(),
   R2_ACCESS_KEY_ID: Type.String(),
@@ -60,6 +61,10 @@ const r2 = new S3Client({
 const SET_SIZE = 5;
 const FETCH_TIMEOUT_MS = 30_000;
 const AI_IMAGE_MODEL = "fal-ai/flux-pro/v1.1";
+const IMAGE_WIDTH = 1024;
+const IMAGE_HEIGHT = 768;
+const WEBP_QUALITY = 85;
+const MAX_DESCRIPTION_CHARS = 200;
 
 interface FetchedImage {
   bytes: Buffer;
@@ -67,9 +72,9 @@ interface FetchedImage {
   alt: string;
 }
 
-const pexels = ky.create({
-  prefix: "https://api.pexels.com/v1",
-  headers: { Authorization: config.PEXELS_API_KEY },
+const unsplash = ky.create({
+  prefix: "https://api.unsplash.com",
+  headers: { Authorization: `Client-ID ${config.UNSPLASH_API_KEY}` },
   timeout: FETCH_TIMEOUT_MS,
   retry: {
     limit: 3,
@@ -78,19 +83,19 @@ const pexels = ky.create({
   },
 });
 
-const PexelsResponse = Type.Object({
-  photos: Type.Array(Type.Object({
-    src: Type.Object({ large: Type.String() }),
-    alt: Type.String(),
-  })),
-});
+const UnsplashResponse = Type.Array(Type.Object({
+  id: Type.String(),
+  alt_description: Type.String(),
+  description: Type.Union([Type.String(), Type.Null()]),
+  urls: Type.Object({ regular: Type.String() }),
+}));
 
-const realRes = await pexels.get("curated", { searchParams: { page: 1, per_page: SET_SIZE } }).json();
-const realData = Value.Parse(PexelsResponse, realRes);
+const realRes = await unsplash.get("photos/random", { searchParams: { count: SET_SIZE, orientation: "squarish" } }).json();
+const realData = Value.Parse(UnsplashResponse, realRes);
 
 const realImages: FetchedImage[] = await Promise.all(
-  realData.photos.map(async (photo) => {
-    const res = await ky.get(photo.src.large, {
+  realData.map(async (photo) => {
+    const res = await ky.get(photo.urls.regular, {
       timeout: FETCH_TIMEOUT_MS,
       retry: { limit: 3 },
     });
@@ -98,29 +103,56 @@ const realImages: FetchedImage[] = await Promise.all(
     return {
       bytes: Buffer.from(await res.arrayBuffer()),
       contentType: res.headers.get("content-type") ?? "image/jpeg",
-      alt: photo.alt,
+      alt: photo.alt_description,
     };
   }),
 );
 
+const truncateDescription = (text: string): string => {
+  if (text.length <= MAX_DESCRIPTION_CHARS) {
+    return text;
+  }
+
+  const truncated = text.slice(0, MAX_DESCRIPTION_CHARS);
+  const lastSpace = truncated.lastIndexOf(" ");
+
+  return (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated) + "…";
+};
+
 const aiImages: FetchedImage[] = await Promise.all(
-  realImages.map(async (realImage) => {
+  realData.map(async (photo) => {
+    const prompt = [
+      photo.alt_description,
+      photo.description && truncateDescription(photo.description),
+      "Candid photograph, natural lighting.",
+    ].filter(Boolean).join(". ");
+
     const { image } = await generateImage({
       model: fal.image(AI_IMAGE_MODEL),
-      prompt: `${realImage.alt}. Candid photograph, natural lighting.`, // TODO: improve prompt; LLM call to improve alt text?
+      prompt,
+      aspectRatio: "4:3",
     });
 
     return {
       bytes: Buffer.from(image.uint8Array),
       contentType: image.mediaType,
-      alt: realImage.alt,
+      alt: photo.alt_description,
     };
   }),
 );
 
-// TODO: normalize all images with sharp before upload (resize to common
-// dimensions, strip EXIF, re-encode as webp) so file metadata can't leak which
-// images are AI.
+const normalizeImage = async (image: FetchedImage): Promise<FetchedImage> => {
+  const sharpBytes = await sharp(image.bytes)
+    .resize(IMAGE_WIDTH, IMAGE_HEIGHT, { fit: "cover", position: "center" })
+    .webp({ quality: WEBP_QUALITY })
+    .toBuffer();
+
+  return {
+    bytes: sharpBytes,
+    contentType: "image/webp",
+    alt: image.alt,
+  };
+};
 
 const uploadImage = async (image: FetchedImage): Promise<string> => {
   const key = `sets/${targetDate}/${crypto.randomUUID()}`;
@@ -135,15 +167,18 @@ const uploadImage = async (image: FetchedImage): Promise<string> => {
   return key;
 };
 
+const normalizedRealImages = await Promise.all(realImages.map(normalizeImage));
+const normalizedAiImages = await Promise.all(aiImages.map(normalizeImage));
+
 const realRecords = await Promise.all(
-  realImages.map(async img => ({
+  normalizedRealImages.map(async img => ({
     storage_key: await uploadImage(img),
     is_ai: false,
   })),
 );
 
 const aiRecords = await Promise.all(
-  aiImages.map(async img => ({
+  normalizedAiImages.map(async img => ({
     storage_key: await uploadImage(img),
     is_ai: true,
   })),
