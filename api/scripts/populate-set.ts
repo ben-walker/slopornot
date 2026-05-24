@@ -4,12 +4,15 @@ import { addDays, format } from "date-fns";
 import { Type } from "typebox";
 import { Value } from "typebox/value";
 import { drizzle } from "drizzle-orm/postgres-js";
+import { fal } from "@ai-sdk/fal";
+import { generateImage } from "ai";
 import ky from "ky";
 import { parseArgs } from "node:util";
 
 const Config = Type.Object({
   DATABASE_URL: Type.String(),
   PEXELS_API_KEY: Type.String(),
+  FAL_API_KEY: Type.String(),
   R2_ACCOUNT_ID: Type.String(),
   R2_ACCESS_KEY_ID: Type.String(),
   R2_SECRET_ACCESS_KEY: Type.String(),
@@ -56,6 +59,7 @@ const r2 = new S3Client({
 
 const SET_SIZE = 5;
 const FETCH_TIMEOUT_MS = 30_000;
+const AI_IMAGE_MODEL = "fal-ai/flux-pro/v1.1";
 
 interface FetchedImage {
   bytes: Buffer;
@@ -99,9 +103,20 @@ const realImages: FetchedImage[] = await Promise.all(
   }),
 );
 
-// TODO: generate 5 AI images. Plan is to seed prompts from realImages[].alt
-// plus a photorealistic style suffix so the AI set matches the real set's look.
-const aiImages: FetchedImage[] = [];
+const aiImages: FetchedImage[] = await Promise.all(
+  realImages.map(async (realImage) => {
+    const { image } = await generateImage({
+      model: fal.image(AI_IMAGE_MODEL),
+      prompt: `${realImage.alt}. Candid photograph, natural lighting.`, // TODO: improve prompt; LLM call to improve alt text?
+    });
+
+    return {
+      bytes: Buffer.from(image.uint8Array),
+      contentType: image.mediaType,
+      alt: realImage.alt,
+    };
+  }),
+);
 
 // TODO: normalize all images with sharp before upload (resize to common
 // dimensions, strip EXIF, re-encode as webp) so file metadata can't leak which
