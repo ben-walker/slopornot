@@ -2,6 +2,8 @@ import type { PerformanceTier } from "./types";
 
 const STORAGE_KEY_GAME = "games";
 
+const ROUNDS_PER_ROW = 5;
+
 const titleBuckets: Record<PerformanceTier, string[]> = {
   perfect: ["The slop identifier has logged on"],
   great: ["This baby was born to slop, eats it up"],
@@ -12,6 +14,7 @@ const titleBuckets: Record<PerformanceTier, string[]> = {
 };
 
 export {
+  ROUNDS_PER_ROW,
   STORAGE_KEY_GAME,
   titleBuckets,
 };

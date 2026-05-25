@@ -3,6 +3,7 @@ import { CheckIcon, ShareIcon } from "@phosphor-icons/react";
 import type { Guess, HistoryEntry } from "src/features/game/types";
 import { format, parse } from "date-fns";
 import { LineChart } from "@mantine/charts";
+import { ROUNDS_PER_ROW } from "src/features/game/constants";
 import { getTitle } from "src/features/game/utils";
 import { useMemo } from "react";
 
@@ -48,10 +49,14 @@ function GameResultsModal({
   ], [averageCorrect, correctCount, totalRounds]);
 
   const shareText = useMemo(() => {
-    const dots = guesses.map(guess => (guess.isCorrect ? "🔵" : "⚫")).join("");
+    const dots = guesses.map(guess => (guess.isCorrect ? "🔵" : "⚫"));
+    const rowCount = Math.ceil(dots.length / ROUNDS_PER_ROW);
+    const dotRows = Array.from({ length: rowCount }, (_, i) =>
+      dots.slice(i * ROUNDS_PER_ROW, (i + 1) * ROUNDS_PER_ROW).join(""),
+    ).join("\n");
     const today = format(new Date(), "MMM d, yyyy");
 
-    return `slopornot • ${today} • ${String(correctCount)}/${String(totalRounds)}\n\n${dots}`;
+    return `slopornot • ${today} • ${String(correctCount)}/${String(totalRounds)}\n\n${dotRows}`;
   }, [correctCount, guesses, totalRounds]);
 
   return (

@@ -1,6 +1,9 @@
 import { defineConfig } from "tsdown";
 
 export default defineConfig({
+  deps: {
+    onlyAllowBundle: false,
+  },
   entry: {
     "main": "./src/main.ts",
     "db-migrate": "./scripts/db-migrate.ts",

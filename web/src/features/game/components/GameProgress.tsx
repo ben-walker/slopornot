@@ -1,6 +1,7 @@
-import { Box, Group } from "@mantine/core";
+import { Box, SimpleGrid } from "@mantine/core";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
 import type { Guess } from "src/features/game/types";
+import { ROUNDS_PER_ROW } from "src/features/game/constants";
 import classes from "./GameProgress.module.css";
 
 const PROGRESS_SIZE = 28;
@@ -30,7 +31,7 @@ function GameProgress({
   };
 
   return (
-    <Group>
+    <SimpleGrid cols={ROUNDS_PER_ROW} spacing="sm">
       {Array.from({ length: totalRounds }).map((_, index) => {
         const guess = guesses[index];
 
@@ -54,7 +55,7 @@ function GameProgress({
           </Box>
         );
       })}
-    </Group>
+    </SimpleGrid>
   );
 }
 

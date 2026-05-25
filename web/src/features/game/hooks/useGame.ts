@@ -1,5 +1,5 @@
-import type { Games, HistoryEntry, ImageEntry } from "src/features/game/types";
-import { buildImagePairs, clampImageIndex } from "src/features/game/utils";
+import type { Answer, Games, HistoryEntry, ImageEntry } from "src/features/game/types";
+import { buildImageEntry, clampImageIndex, shuffleImages } from "src/features/game/utils";
 import { useCallback, useMemo, useState } from "react";
 import { STORAGE_KEY_GAME } from "src/features/game/constants";
 import { useGetSetsDate } from "src/api/generated";
@@ -11,9 +11,15 @@ function useGame() {
 
   const { data } = useGetSetsDate(today);
 
-  const imagePairs = useMemo(() => (
-    buildImagePairs(data?.images)
-  ), [data?.images]);
+  const images = useMemo(() => {
+    if (!data?.images) {
+      return [];
+    }
+
+    const imageEntries = data.images.map(buildImageEntry);
+
+    return shuffleImages(imageEntries, today);
+  }, [data?.images, today]);
 
   const [games, setGames] = useLocalStorage<Games>({
     defaultValue: {},
@@ -23,11 +29,11 @@ function useGame() {
   const [viewingIndex, setViewingIndex] = useState(0);
 
   const guesses = games[today]?.guesses ?? [];
-  const totalRounds = imagePairs.length;
+  const totalRounds = images.length;
   const completedRounds = guesses.length;
   const isGameOver = totalRounds > 0 && completedRounds >= totalRounds;
   const activeIndex = isGameOver ? viewingIndex : completedRounds;
-  const currentPair = imagePairs[activeIndex];
+  const currentImage = images[activeIndex];
   const currentGuess = guesses[activeIndex];
 
   const history = useMemo<HistoryEntry[]>(() => {
@@ -52,14 +58,16 @@ function useGame() {
     return history.reduce((sum, entry) => sum + entry.accuracy, 0) / history.length / 100;
   }, [history]);
 
-  const onGuess = useCallback((image: ImageEntry) => {
+  const onGuess = useCallback((image: ImageEntry, answer: Answer) => {
+    const isCorrect = (answer === "ai") === image.isAi;
+
     setGames((prev) => {
       const prevTodayGuesses = prev[today]?.guesses ?? [];
 
       return {
         ...prev,
         [today]: {
-          guesses: [...prevTodayGuesses, { isCorrect: image.isAi, selectedImageId: image.id }],
+          guesses: [...prevTodayGuesses, { answer, imageId: image.id, isCorrect }],
           totalRounds,
         },
       };
@@ -77,7 +85,7 @@ function useGame() {
     averageCorrect,
     completedRounds,
     currentGuess,
-    currentPair,
+    currentImage,
     guesses,
     history,
     isGameOver,

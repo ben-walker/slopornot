@@ -1,6 +1,9 @@
+type Answer = "real" | "ai";
+
 interface Guess {
+  answer: Answer;
+  imageId: string;
   isCorrect: boolean;
-  selectedImageId: string;
 }
 
 interface Game {
@@ -16,11 +19,6 @@ interface ImageEntry {
   isAi: boolean;
 }
 
-interface ImagePair {
-  left: ImageEntry;
-  right: ImageEntry;
-}
-
 interface HistoryEntry {
   accuracy: number;
   date: string;
@@ -29,11 +27,11 @@ interface HistoryEntry {
 type PerformanceTier = "perfect" | "great" | "good" | "ok" | "poor" | "terrible";
 
 export type {
+  Answer,
   Guess,
   Game,
   Games,
   HistoryEntry,
   ImageEntry,
-  ImagePair,
   PerformanceTier,
 };

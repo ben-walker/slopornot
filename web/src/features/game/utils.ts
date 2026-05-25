@@ -1,4 +1,5 @@
-import type { ImageEntry, ImagePair, PerformanceTier } from "./types";
+import type { ImageEntry, PerformanceTier } from "./types";
+import { createMulberry32, hashSeed } from "src/utils/random";
 import type { GetSetsDate200ImagesItem } from "src/api/generated";
 import { titleBuckets } from "./constants";
 
@@ -7,45 +8,6 @@ const buildImageEntry = (image: GetSetsDate200ImagesItem): ImageEntry => ({
   isAi: image.is_ai,
   storageUrl: image.storage_url,
 });
-
-const hashPair = (idA: string, idB: string) => {
-  const str = idA + idB;
-  let hash = 5381;
-
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash * 33) ^ str.charCodeAt(i);
-  }
-
-  return hash;
-};
-
-const buildImagePairs = (images?: GetSetsDate200ImagesItem[]): ImagePair[] => {
-  if (!images?.length) {
-    return [];
-  }
-
-  const aiImages = images.filter(({ is_ai }) => is_ai);
-  const realImages = images.filter(({ is_ai }) => !is_ai);
-
-  if (aiImages.length !== realImages.length) {
-    throw new Error(`Expected equal AI and real images, got ${String(aiImages.length)} AI and ${String(realImages.length)} real`);
-  }
-
-  return aiImages.map((ai, index) => {
-    const real = realImages[index];
-
-    if (!real) {
-      throw new Error(`Missing real image at index ${String(index)}`);
-    }
-
-    const aiImage = buildImageEntry(ai);
-    const realImage = buildImageEntry(real);
-
-    return hashPair(aiImage.id, realImage.id) % 2 === 0
-      ? { left: aiImage, right: realImage }
-      : { left: realImage, right: aiImage };
-  });
-};
 
 const getBucketKey = (ratio: number): PerformanceTier => {
   if (ratio === 1) {
@@ -77,8 +39,27 @@ const getTitle = (correctCount: number, totalRounds: number): string => {
   return bucket[Math.floor(Math.random() * bucket.length)] ?? "Thanks for playing today!";
 };
 
+const shuffleImages = (images: ImageEntry[], seed: string): ImageEntry[] => {
+  const random = createMulberry32(hashSeed(seed));
+  const result = [...images];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    const a = result[i];
+    const b = result[j];
+
+    if (a !== undefined && b !== undefined) {
+      result[i] = b;
+      result[j] = a;
+    }
+  }
+
+  return result;
+};
+
 export {
-  buildImagePairs,
+  buildImageEntry,
   clampImageIndex,
   getTitle,
+  shuffleImages,
 };

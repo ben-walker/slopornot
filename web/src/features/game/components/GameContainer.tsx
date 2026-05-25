@@ -9,7 +9,7 @@ function GameContainer() {
     activeIndex,
     averageCorrect,
     currentGuess,
-    currentPair,
+    currentImage,
     guesses,
     history,
     isGameOver,
@@ -26,6 +26,10 @@ function GameContainer() {
     }
   }, [isGameOver, openResults]);
 
+  if (currentImage === undefined) {
+    return null;
+  }
+
   return (
     <>
       <GameResultsModal
@@ -40,7 +44,7 @@ function GameContainer() {
         activeIndex={activeIndex}
         currentGuess={currentGuess}
         guesses={guesses}
-        imagePair={currentPair}
+        image={currentImage}
         isGameOver={isGameOver}
         onGuess={onGuess}
         onNavigate={onNavigate}
