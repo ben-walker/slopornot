@@ -9,7 +9,7 @@ interface GameBoardProps {
   activeIndex: number;
   currentGuess: Guess | undefined;
   guesses: Guess[];
-  image: ImageEntry;
+  image: ImageEntry | undefined;
   isGameOver: boolean;
   onGuess: (image: ImageEntry, answer: Answer) => void;
   onNavigate: (index: number) => void;
@@ -30,6 +30,14 @@ function GameBoard({
 }: GameBoardProps) {
   const timeUntilMidnight = useTimeUntilMidnight();
 
+  const onGuessWrapper = (answer: Answer) => () => {
+    if (!image) {
+      return;
+    }
+
+    onGuess(image, answer);
+  };
+
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column" gap="md">
       <Box className={classes.cardArea} flex={1} mih={0} px="md">
@@ -39,13 +47,15 @@ function GameBoard({
             <Group grow w="100%" maw={400}>
               <Button
                 variant="default"
-                onClick={() => { onGuess(image, "real"); }}
+                disabled={!image}
+                onClick={onGuessWrapper("real")}
               >
                 Real
               </Button>
               <Button
                 variant="default"
-                onClick={() => { onGuess(image, "ai"); }}
+                disabled={!image}
+                onClick={onGuessWrapper("ai")}
               >
                 Slop
               </Button>

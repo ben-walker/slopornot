@@ -26,10 +26,6 @@ function GameContainer() {
     }
   }, [isGameOver, openResults]);
 
-  if (currentImage === undefined) {
-    return null;
-  }
-
   return (
     <>
       <GameResultsModal
