@@ -3,6 +3,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { addDays, format } from "date-fns";
 import { Type } from "typebox";
 import { Value } from "typebox/value";
+import { createHash } from "node:crypto";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { fal } from "@ai-sdk/fal";
 import { generateImage } from "ai";
@@ -58,13 +59,18 @@ const r2 = new S3Client({
   },
 });
 
-const SET_SIZE = 5;
+const SET_SIZE = 10;
+const MIN_AI = 3;
+const MAX_AI = 7;
 const FETCH_TIMEOUT_MS = 30_000;
 const AI_IMAGE_MODEL = "fal-ai/flux-pro/v1.1";
 const IMAGE_WIDTH = 1024;
 const IMAGE_HEIGHT = 768;
 const WEBP_QUALITY = 85;
 const MAX_DESCRIPTION_CHARS = 200;
+
+const dateHash = createHash("sha256").update(targetDate).digest().readUInt8(0);
+const aiCount = (dateHash % (MAX_AI - MIN_AI + 1)) + MIN_AI;
 
 interface FetchedImage {
   bytes: Buffer;
@@ -90,11 +96,15 @@ const UnsplashResponse = Type.Array(Type.Object({
   urls: Type.Object({ regular: Type.String() }),
 }));
 
-const realRes = await unsplash.get("photos/random", { searchParams: { count: SET_SIZE, orientation: "squarish" } }).json();
+const realRes = await unsplash.get("photos/random", { searchParams: { count: SET_SIZE, orientation: "landscape" } }).json();
 const realData = Value.Parse(UnsplashResponse, realRes);
 
+if (realData.length < SET_SIZE) {
+  throw new Error(`Received ${String(realData.length)} real images, need ${String(SET_SIZE)}`);
+}
+
 const realImages: FetchedImage[] = await Promise.all(
-  realData.map(async (photo) => {
+  realData.slice(aiCount).map(async (photo) => {
     const res = await ky.get(photo.urls.regular, {
       timeout: FETCH_TIMEOUT_MS,
       retry: { limit: 3 },
@@ -120,7 +130,7 @@ const truncateDescription = (text: string): string => {
 };
 
 const aiImages: FetchedImage[] = await Promise.all(
-  realData.map(async (photo) => {
+  realData.slice(0, aiCount).map(async (photo) => {
     const prompt = [
       photo.alt_description,
       photo.description && truncateDescription(photo.description),
