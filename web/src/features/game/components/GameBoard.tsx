@@ -32,7 +32,7 @@ function GameBoard({
 
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column" gap="md">
-      <Box className={classes.cardArea} flex={1} mih={0}>
+      <Box className={classes.cardArea} flex={1} mih={0} px="md">
         <Stack h="100%" gap="sm" align="center" justify="center">
           <GameCard guess={currentGuess} image={image} />
           {!isGameOver && (
