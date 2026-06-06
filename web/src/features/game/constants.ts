@@ -4,6 +4,10 @@ const STORAGE_KEY_GAME = "games";
 
 const ROUNDS_PER_ROW = 5;
 
+const ANTICIPATION_DELAY_MS = 1500;
+
+const REVEAL_DELAY_MS = 1000;
+
 const titleBuckets: Record<PerformanceTier, string[]> = {
   perfect: ["The slop identifier has logged on"],
   great: ["This baby was born to slop, eats it up"],
@@ -14,6 +18,8 @@ const titleBuckets: Record<PerformanceTier, string[]> = {
 };
 
 export {
+  ANTICIPATION_DELAY_MS,
+  REVEAL_DELAY_MS,
   ROUNDS_PER_ROW,
   STORAGE_KEY_GAME,
   titleBuckets,

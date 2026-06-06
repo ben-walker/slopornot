@@ -30,4 +30,35 @@
       background-color: var(--mantine-color-incorrect-filled);
     }
   }
+
+  .ringWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: var(--mantine-spacing-sm);
+    border-radius: var(--mantine-radius-lg);
+    background-color: rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: var(--mantine-shadow-xl);
+  }
+
+  .ringInnerCircle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-inline: auto;
+    border-radius: 50%;
+
+    &[data-is-correct="true"] {
+      background-color: var(--mantine-color-correct-filled);
+    }
+
+    &[data-is-correct="false"] {
+      background-color: var(--mantine-color-incorrect-filled);
+    }
+  }
 }

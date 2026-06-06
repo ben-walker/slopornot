@@ -1,7 +1,7 @@
-import type { Answer, Games, HistoryEntry, ImageEntry } from "src/features/game/types";
+import { ANTICIPATION_DELAY_MS, REVEAL_DELAY_MS, STORAGE_KEY_GAME } from "src/features/game/constants";
+import type { Answer, Games, Guess, GuessPhase, HistoryEntry, ImageEntry } from "src/features/game/types";
 import { buildImageEntry, clampImageIndex, shuffleImages } from "src/features/game/utils";
-import { useCallback, useMemo, useState } from "react";
-import { STORAGE_KEY_GAME } from "src/features/game/constants";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useGetSetsDate } from "src/api/generated";
 import { useLocalStorage } from "@mantine/hooks";
 import { useToday } from "src/hooks/useToday";
@@ -27,6 +27,8 @@ function useGame() {
   });
 
   const [viewingIndex, setViewingIndex] = useState(0);
+  const [pendingGuess, setPendingGuess] = useState<Guess | undefined>(undefined);
+  const [phase, setPhase] = useState<GuessPhase>("idle");
 
   const guesses = games[today]?.guesses ?? [];
   const totalRounds = images.length;
@@ -34,7 +36,7 @@ function useGame() {
   const isGameOver = totalRounds > 0 && completedRounds >= totalRounds;
   const activeIndex = isGameOver ? viewingIndex : completedRounds;
   const currentImage = images[activeIndex];
-  const currentGuess = guesses[activeIndex];
+  const currentGuess = guesses[activeIndex] ?? (phase === "revealed" ? pendingGuess : undefined);
 
   const history = useMemo<HistoryEntry[]>(() => {
     return Object.entries(games)
@@ -59,22 +61,53 @@ function useGame() {
   }, [history]);
 
   const onGuess = useCallback((image: ImageEntry, answer: Answer) => {
+    if (phase !== "idle") {
+      return;
+    }
+
     const isCorrect = (answer === "ai") === image.isAi;
 
-    setGames((prev) => {
-      const prevTodayGuesses = prev[today]?.guesses ?? [];
+    setPendingGuess({ answer, imageId: image.id, isCorrect });
+    setPhase("pending");
+  }, [phase]);
 
-      return {
-        ...prev,
-        [today]: {
-          guesses: [...prevTodayGuesses, { answer, imageId: image.id, isCorrect }],
-          totalRounds,
-        },
+  useEffect(() => {
+    if (phase === "pending") {
+      const timeoutId = setTimeout(() => {
+        setPhase("revealed");
+      }, ANTICIPATION_DELAY_MS);
+
+      return () => {
+        clearTimeout(timeoutId);
       };
-    });
+    }
 
-    setViewingIndex(prev => clampImageIndex(prev + 1, totalRounds));
-  }, [setGames, today, totalRounds]);
+    if (phase === "revealed") {
+      const timeoutId = setTimeout(() => {
+        if (pendingGuess) {
+          setGames((prev) => {
+            const prevTodayGuesses = prev[today]?.guesses ?? [];
+
+            return {
+              ...prev,
+              [today]: {
+                guesses: [...prevTodayGuesses, pendingGuess],
+                totalRounds,
+              },
+            };
+          });
+        }
+
+        setViewingIndex(prev => clampImageIndex(prev + 1, totalRounds));
+        setPendingGuess(undefined);
+        setPhase("idle");
+      }, REVEAL_DELAY_MS);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [phase, pendingGuess, setGames, today, totalRounds]);
 
   const onNavigate = useCallback((index: number) => {
     setViewingIndex(clampImageIndex(index, totalRounds));
@@ -91,6 +124,8 @@ function useGame() {
     isGameOver,
     onGuess,
     onNavigate,
+    pendingGuess,
+    phase,
     totalRounds,
   };
 }

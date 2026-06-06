@@ -1,5 +1,7 @@
 type Answer = "real" | "ai";
 
+type GuessPhase = "idle" | "pending" | "revealed";
+
 interface Guess {
   answer: Answer;
   imageId: string;
@@ -29,6 +31,7 @@ type PerformanceTier = "perfect" | "great" | "good" | "ok" | "poor" | "terrible"
 export type {
   Answer,
   Guess,
+  GuessPhase,
   Game,
   Games,
   HistoryEntry,
