@@ -31,13 +31,15 @@ const sets: FastifyPluginCallbackTypebox = (app) => {
       return reply.notFound();
     }
 
-    return {
-      ...set,
-      images: set.images.map(({ storage_key, ...image }) => ({
-        ...image,
-        storage_url: `${config.IMAGE_PUBLIC_URL}/${storage_key}`,
-      })),
-    };
+    return reply
+      .header("cache-control", "public, max-age=300, s-maxage=600")
+      .send({
+        ...set,
+        images: set.images.map(({ storage_key, ...image }) => ({
+          ...image,
+          storage_url: `${config.IMAGE_PUBLIC_URL}/${storage_key}`,
+        })),
+      });
   });
 };
 
