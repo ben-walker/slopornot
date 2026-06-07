@@ -1,6 +1,7 @@
 import * as schema from "src/db/schema";
 import {
   getAlternatingBooleans,
+  getAttribution,
   getConsecutiveDates,
   getSeededImageKey,
 } from "./utils/seed";
@@ -39,6 +40,7 @@ await db.insert(schema.images).values(
     is_ai,
     set_id: set.id,
     storage_key: getSeededImageKey(),
+    ...getAttribution(is_ai),
   }))),
 );
 

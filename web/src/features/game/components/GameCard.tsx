@@ -1,9 +1,7 @@
-import { Box, Card, Group, Image, Skeleton, Text } from "@mantine/core";
-import { CheckIcon, XIcon } from "@phosphor-icons/react";
+import { Box, Card, Image, Skeleton } from "@mantine/core";
 import type { Guess, ImageEntry } from "src/features/game/types";
+import { GameAttribution } from "./GameAttribution";
 import classes from "./GameCard.module.css";
-
-const ICON_SIZE = 20;
 
 interface GameCardProps {
   guess: Guess | undefined;
@@ -27,13 +25,11 @@ function GameCard({ guess, image }: GameCardProps) {
           )
         : <Skeleton h="100%" w="100%" />}
       {image && guess !== undefined && (
-        <Box className={classes.label} data-is-correct={guess.isCorrect}>
-          <Group gap="xs" justify="center" c="white">
-            {guess.isCorrect
-              ? <CheckIcon size={ICON_SIZE} weight="bold" />
-              : <XIcon size={ICON_SIZE} weight="bold" />}
-            <Text fw="bold">{image.isAi ? "Slop" : "Real"}</Text>
-          </Group>
+        <Box className={classes.attribution}>
+          <GameAttribution
+            attribution={image.attribution}
+            isCorrect={guess.isCorrect}
+          />
         </Box>
       )}
     </Card>
