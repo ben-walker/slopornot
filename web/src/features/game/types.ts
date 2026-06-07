@@ -13,10 +13,26 @@ interface Game {
 
 type Games = Record<string, Game | undefined>;
 
+interface RealAttribution {
+  kind: "real";
+  sourceId: string;
+  sourceUrl: string;
+  authorName: string;
+  authorUrl: string;
+}
+
+interface AiAttribution {
+  kind: "ai";
+  model: string;
+}
+
+type Attribution = RealAttribution | AiAttribution;
+
 interface ImageEntry {
   id: string;
   storageUrl: string;
   isAi: boolean;
+  attribution: Attribution;
 }
 
 interface HistoryEntry {
@@ -28,6 +44,7 @@ type PerformanceTier = "perfect" | "great" | "good" | "ok" | "poor" | "terrible"
 
 export type {
   Answer,
+  Attribution,
   Guess,
   Game,
   Games,

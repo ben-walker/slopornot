@@ -20,13 +20,50 @@ import type {
 } from '@tanstack/react-query';
 
 import { api } from '../lib/api';
-export type GetSetsDate200ImagesItem = {
+export type GetSetsDate200ImagesItemAllOf = {
   id: string;
   set_id: string;
-  storage_url: string;
   is_ai: boolean;
   created_at: unknown;
 };
+
+export type GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfKind = typeof GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfKind[keyof typeof GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfKind];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfKind = {
+  real: 'real',
+} as const;
+
+export type GetSetsDate200ImagesItemAllOfTwoAttributionAnyOf = {
+  kind: GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfKind;
+  source_id: string;
+  source_url: string;
+  author_name: string;
+  author_url: string;
+};
+
+export type GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfThreeKind = typeof GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfThreeKind[keyof typeof GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfThreeKind];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfThreeKind = {
+  ai: 'ai',
+} as const;
+
+export type GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfThree = {
+  kind: GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfThreeKind;
+  model: string;
+};
+
+export type GetSetsDate200ImagesItemAllOfTwoAttribution = GetSetsDate200ImagesItemAllOfTwoAttributionAnyOf | GetSetsDate200ImagesItemAllOfTwoAttributionAnyOfThree;
+
+export type GetSetsDate200ImagesItemAllOfTwo = {
+  storage_url: string;
+  attribution: GetSetsDate200ImagesItemAllOfTwoAttribution;
+};
+
+export type GetSetsDate200ImagesItem = GetSetsDate200ImagesItemAllOf & GetSetsDate200ImagesItemAllOfTwo;
 
 export type GetSetsDate200 = {
   id: string;

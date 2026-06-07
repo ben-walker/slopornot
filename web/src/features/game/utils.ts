@@ -1,12 +1,30 @@
-import type { ImageEntry, PerformanceTier } from "./types";
+import type { Attribution, ImageEntry, PerformanceTier } from "./types";
 import { createMulberry32, hashSeed } from "src/utils/random";
 import type { GetSetsDate200ImagesItem } from "src/api/generated";
 import { titleBuckets } from "./constants";
+
+const buildImageAttribution = (attribution: GetSetsDate200ImagesItem["attribution"]): Attribution => {
+  if (attribution.kind === "ai") {
+    return {
+      kind: "ai",
+      model: attribution.model,
+    };
+  }
+
+  return {
+    kind: "real",
+    sourceId: attribution.source_id,
+    sourceUrl: attribution.source_url,
+    authorName: attribution.author_name,
+    authorUrl: attribution.author_url,
+  };
+};
 
 const buildImageEntry = (image: GetSetsDate200ImagesItem): ImageEntry => ({
   id: image.id,
   isAi: image.is_ai,
   storageUrl: image.storage_url,
+  attribution: buildImageAttribution(image.attribution),
 });
 
 const getBucketKey = (ratio: number): PerformanceTier => {
