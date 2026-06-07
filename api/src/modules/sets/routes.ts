@@ -2,6 +2,7 @@ import type { FastifyPluginCallbackTypebox } from "@fastify/type-provider-typebo
 import { SetWithImages } from "./schemas";
 import { Type } from "@fastify/type-provider-typebox";
 import { config } from "src/config";
+import { toAttribution } from "./utils";
 
 const sets: FastifyPluginCallbackTypebox = (app) => {
   app.get("/:date", {
@@ -35,9 +36,10 @@ const sets: FastifyPluginCallbackTypebox = (app) => {
       .header("cache-control", "public, max-age=300, s-maxage=600")
       .send({
         ...set,
-        images: set.images.map(({ storage_key, ...image }) => ({
+        images: set.images.map(image => ({
           ...image,
-          storage_url: `${config.IMAGE_PUBLIC_URL}/${storage_key}`,
+          storage_url: `${config.IMAGE_PUBLIC_URL}/${image.storage_key}`,
+          attribution: toAttribution(image),
         })),
       });
   });

@@ -7,6 +7,17 @@ const getAlternatingBooleans = (length: number): boolean[] => (
   ]
 );
 
+const getAttribution = (isAi: boolean) => isAi
+  ? {
+      model: "seed/seed-model/v2.2",
+    }
+  : {
+      source_id: `seed-${crypto.randomUUID()}`,
+      source_url: "https://unsplash.com/photos/seed",
+      author_name: "Seed Photographer",
+      author_url: "https://unsplash.com/@seed",
+    };
+
 const getConsecutiveDates = (length: number) => (
   Array.from({ length }, (_, i) => {
     const date = addDays(new Date(), i);
@@ -23,6 +34,7 @@ const getSeededImageKey = () => `${crypto.randomUUID()}/800/600`;
 
 export {
   getAlternatingBooleans,
+  getAttribution,
   getConsecutiveDates,
   getSeededImageKey,
 };
