@@ -187,9 +187,9 @@ const normalizeImage = async (image: FetchedImage): Promise<FetchedImage> => {
     .toBuffer();
 
   return {
+    ...image,
     bytes: sharpBytes,
     contentType: "image/webp",
-    alt: image.alt,
   };
 };
 
