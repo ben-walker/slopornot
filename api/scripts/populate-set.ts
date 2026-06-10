@@ -76,6 +76,12 @@ interface FetchedImage {
   bytes: Buffer;
   contentType: string;
   alt: string;
+  attribution?: {
+    sourceId: string;
+    sourceUrl: string;
+    authorName: string;
+    authorUrl: string;
+  };
 }
 
 const unsplash = ky.create({
@@ -94,6 +100,16 @@ const UnsplashResponse = Type.Array(Type.Object({
   alt_description: Type.String(),
   description: Type.Union([Type.String(), Type.Null()]),
   urls: Type.Object({ regular: Type.String() }),
+  links: Type.Object({
+    html: Type.String(),
+    download_location: Type.String(),
+  }),
+  user: Type.Object({
+    name: Type.String(),
+    links: Type.Object({
+      html: Type.String(),
+    }),
+  }),
 }));
 
 const realRes = await unsplash.get("photos/random", { searchParams: { count: SET_SIZE, orientation: "landscape" } }).json();
@@ -105,15 +121,28 @@ if (realData.length < SET_SIZE) {
 
 const realImages: FetchedImage[] = await Promise.all(
   realData.slice(aiCount).map(async (photo) => {
-    const res = await ky.get(photo.urls.regular, {
-      timeout: FETCH_TIMEOUT_MS,
-      retry: { limit: 3 },
-    });
+    const [res] = await Promise.all([
+      ky.get(photo.urls.regular, {
+        timeout: FETCH_TIMEOUT_MS,
+        retry: { limit: 3 },
+      }),
+      ky
+        .get(photo.links.download_location, { headers: { Authorization: `Client-ID ${config.UNSPLASH_API_KEY}` } })
+        .catch((err: unknown) => {
+          console.warn(`Download trigger failed for ${photo.id}:`, err);
+        }),
+    ]);
 
     return {
       bytes: Buffer.from(await res.arrayBuffer()),
       contentType: res.headers.get("content-type") ?? "image/jpeg",
       alt: photo.alt_description,
+      attribution: {
+        sourceId: photo.id,
+        sourceUrl: photo.links.html,
+        authorName: photo.user.name,
+        authorUrl: photo.user.links.html,
+      },
     };
   }),
 );
@@ -158,9 +187,9 @@ const normalizeImage = async (image: FetchedImage): Promise<FetchedImage> => {
     .toBuffer();
 
   return {
+    ...image,
     bytes: sharpBytes,
     contentType: "image/webp",
-    alt: image.alt,
   };
 };
 
@@ -181,16 +210,27 @@ const normalizedRealImages = await Promise.all(realImages.map(normalizeImage));
 const normalizedAiImages = await Promise.all(aiImages.map(normalizeImage));
 
 const realRecords = await Promise.all(
-  normalizedRealImages.map(async img => ({
-    storage_key: await uploadImage(img),
-    is_ai: false,
-  })),
+  normalizedRealImages.map(async (img) => {
+    if (!img.attribution) {
+      throw new Error("Real image missing attribution");
+    }
+
+    return {
+      storage_key: await uploadImage(img),
+      is_ai: false,
+      source_id: img.attribution.sourceId,
+      source_url: img.attribution.sourceUrl,
+      author_name: img.attribution.authorName,
+      author_url: img.attribution.authorUrl,
+    };
+  }),
 );
 
 const aiRecords = await Promise.all(
   normalizedAiImages.map(async img => ({
     storage_key: await uploadImage(img),
     is_ai: true,
+    model: AI_IMAGE_MODEL,
   })),
 );
 

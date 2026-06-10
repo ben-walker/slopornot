@@ -14,21 +14,12 @@
     object-fit: cover;
   }
 
-  .label {
+  .attribution {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: var(--mantine-spacing-sm);
-    text-align: center;
-
-    &[data-is-correct="true"] {
-      background-color: var(--mantine-color-correct-filled);
-    }
-
-    &[data-is-correct="false"] {
-      background-color: var(--mantine-color-incorrect-filled);
-    }
+    bottom: var(--mantine-spacing-sm);
+    left: var(--mantine-spacing-sm);
+    max-width: calc(100% - var(--mantine-spacing-sm) * 2);
+    word-break: break-word;
   }
 
   .ringWrapper {
