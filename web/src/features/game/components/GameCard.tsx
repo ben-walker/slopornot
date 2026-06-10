@@ -4,11 +4,12 @@ import type { Guess, GuessPhase, ImageEntry } from "src/features/game/types";
 import { useEffect, useState } from "react";
 import { ANTICIPATION_DELAY_MS } from "src/features/game/constants";
 import { GameAttribution } from "./GameAttribution";
+import { GlassPaper } from "src/components/GlassPaper";
 import classes from "./GameCard.module.css";
 
-const RING_ICON_SIZE = 28;
-const RING_SIZE = 112;
-const RING_THICKNESS = 12;
+const RING_ICON_SIZE = 24;
+const RING_SIZE = 92;
+const RING_THICKNESS = 10;
 
 interface GameCardProps {
   guess: Guess | undefined;
@@ -71,7 +72,14 @@ function GameCard({ guess, image, pendingGuess, phase }: GameCardProps) {
           )
         : <Skeleton h="100%" w="100%" />}
       {pendingGuess && phase !== "idle" && (
-        <Box className={classes.ringWrapper}>
+        <GlassPaper
+          className={classes.ringWrapper}
+          data-phase={phase}
+          p="sm"
+          radius="lg"
+          shadow="xl"
+          withBorder
+        >
           <RingProgress
             sections={[{ value: progress, color: ringColor }]}
             size={RING_SIZE}
@@ -92,13 +100,14 @@ function GameCard({ guess, image, pendingGuess, phase }: GameCardProps) {
                 : null
             }
           />
-        </Box>
+        </GlassPaper>
       )}
       {image && guess !== undefined && (
         <Box className={classes.attribution}>
           <GameAttribution
             attribution={image.attribution}
             isCorrect={guess.isCorrect}
+            phase={phase}
           />
         </Box>
       )}

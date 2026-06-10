@@ -1,7 +1,8 @@
 import { Anchor, Code, Group, Stack, Text } from "@mantine/core";
+import type { Attribution, GuessPhase } from "src/features/game/types";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
-import type { Attribution } from "src/features/game/types";
 import { GlassPaper } from "src/components/GlassPaper";
+import classes from "./GameAttribution.module.css";
 
 const UTM_SOURCE = "slopornot";
 const UTM_MEDIUM = "referral";
@@ -21,14 +22,23 @@ const UNSPLASH_HOME = withUtm("https://unsplash.com/");
 interface GameAttributionProps {
   attribution: Attribution;
   isCorrect: boolean;
+  phase?: GuessPhase;
 }
 
 function GameAttribution({
   attribution,
   isCorrect,
+  phase,
 }: GameAttributionProps) {
   return (
-    <GlassPaper p="sm" radius="md" shadow="xl" withBorder>
+    <GlassPaper
+      className={classes.paper}
+      data-phase={phase}
+      p="sm"
+      radius="md"
+      shadow="xl"
+      withBorder
+    >
       <Stack gap="xs" c="white">
         <Group gap="xs">
           <Text fw="bold">{attribution.kind === "ai" ? "Slop" : "Real"}</Text>
