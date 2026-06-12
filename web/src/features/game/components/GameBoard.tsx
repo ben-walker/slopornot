@@ -1,4 +1,4 @@
-import type { Answer, Guess, ImageEntry } from "src/features/game/types";
+import type { Answer, Guess, GuessPhase, ImageEntry } from "src/features/game/types";
 import { Box, Button, Container, Flex, Group, Stack, Text } from "@mantine/core";
 import { GameCard } from "./GameCard";
 import { GameProgress } from "./GameProgress";
@@ -14,6 +14,8 @@ interface GameBoardProps {
   onGuess: (image: ImageEntry, answer: Answer) => void;
   onNavigate: (index: number) => void;
   onShowResults: () => void;
+  pendingGuess: Guess | undefined;
+  phase: GuessPhase;
   totalRounds: number;
 }
 
@@ -26,6 +28,8 @@ function GameBoard({
   onGuess,
   onNavigate,
   onShowResults,
+  pendingGuess,
+  phase,
   totalRounds,
 }: GameBoardProps) {
   const timeUntilMidnight = useTimeUntilMidnight();
@@ -38,23 +42,30 @@ function GameBoard({
     onGuess(image, answer);
   };
 
+  const isButtonDisabled = !image || phase !== "idle";
+
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column" gap="md">
       <Box className={classes.cardArea} flex={1} mih={0} px="md">
         <Stack h="100%" gap="sm" align="center" justify="center">
-          <GameCard guess={currentGuess} image={image} />
+          <GameCard
+            guess={currentGuess}
+            image={image}
+            pendingGuess={pendingGuess}
+            phase={phase}
+          />
           {!isGameOver && (
             <Group grow w="100%" maw={400}>
               <Button
                 variant="default"
-                disabled={!image}
+                disabled={isButtonDisabled}
                 onClick={onGuessWrapper("real")}
               >
                 Real
               </Button>
               <Button
                 variant="default"
-                disabled={!image}
+                disabled={isButtonDisabled}
                 onClick={onGuessWrapper("ai")}
               >
                 Slop
