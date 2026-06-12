@@ -28,28 +28,4 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
-
-  .ringInnerCircle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    animation: ringInnerFadeIn 200ms ease both;
-    will-change: opacity;
-
-    &[data-is-correct="true"] {
-      background-color: var(--mantine-color-correct-filled);
-    }
-
-    &[data-is-correct="false"] {
-      background-color: var(--mantine-color-incorrect-filled);
-    }
-  }
-}
-
-@keyframes ringInnerFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
