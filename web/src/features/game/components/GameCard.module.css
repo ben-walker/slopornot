@@ -21,4 +21,11 @@
     max-width: calc(100% - var(--mantine-spacing-sm) * 2);
     word-break: break-word;
   }
+
+  .ringWrapper {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

@@ -15,6 +15,8 @@ function GameContainer() {
     isGameOver,
     onGuess,
     onNavigate,
+    pendingGuess,
+    phase,
     totalRounds,
   } = useGame();
 
@@ -45,6 +47,8 @@ function GameContainer() {
         onGuess={onGuess}
         onNavigate={onNavigate}
         onShowResults={openResults}
+        pendingGuess={pendingGuess}
+        phase={phase}
         totalRounds={totalRounds}
       />
     </>
