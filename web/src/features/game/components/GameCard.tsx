@@ -75,7 +75,7 @@ function GameCard({ guess, image, pendingGuess, phase }: GameCardProps) {
         <GlassPaper
           className={classes.ringWrapper}
           data-phase={phase}
-          p="sm"
+          p="xs"
           radius="lg"
           shadow="xl"
           withBorder

@@ -4,7 +4,7 @@ const STORAGE_KEY_GAME = "games";
 
 const ROUNDS_PER_ROW = 5;
 
-const ANTICIPATION_DELAY_MS = 1500;
+const ANTICIPATION_DELAY_MS = 1000;
 
 const REVEAL_DELAY_MS = 2000;
 

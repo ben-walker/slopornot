@@ -38,6 +38,7 @@
     margin-inline: auto;
     border-radius: 50%;
     animation: ringInnerFadeIn 200ms ease both;
+    will-change: opacity;
 
     &[data-is-correct="true"] {
       background-color: var(--mantine-color-correct-filled);
