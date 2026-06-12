@@ -1,9 +1,9 @@
 import { Box, Center, RingProgress } from "@mantine/core";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import { ANTICIPATION_DELAY_MS } from "src/features/game/constants";
 import { GlassPaper } from "src/components/GlassPaper";
 import type { GuessPhase } from "src/features/game/types";
+import { PHASE_DURATIONS_MS } from "src/features/game/constants";
 import classes from "./GameRing.module.css";
 
 const ICON_SIZE = 26;
@@ -34,7 +34,7 @@ function GameRing({ isCorrect, phase }: GameRingProps) {
 
     const tick = (now: number) => {
       const elapsed = now - start;
-      const next = Math.min(100, (elapsed / ANTICIPATION_DELAY_MS) * 100);
+      const next = Math.min(100, (elapsed / PHASE_DURATIONS_MS.pending) * 100);
       setProgress(next);
 
       if (next < 100) {

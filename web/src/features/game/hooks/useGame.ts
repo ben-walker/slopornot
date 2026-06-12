@@ -1,5 +1,5 @@
-import { ANTICIPATION_DELAY_MS, REVEAL_DELAY_MS, STORAGE_KEY_GAME } from "src/features/game/constants";
 import type { Answer, Games, Guess, GuessPhase, HistoryEntry, ImageEntry } from "src/features/game/types";
+import { PHASE_DURATIONS_MS, STORAGE_KEY_GAME } from "src/features/game/constants";
 import { buildImageEntry, clampImageIndex, shuffleImages } from "src/features/game/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useGetSetsDate } from "src/api/generated";
@@ -75,7 +75,7 @@ function useGame() {
     if (phase === "pending") {
       const timeoutId = setTimeout(() => {
         setPhase("revealed");
-      }, ANTICIPATION_DELAY_MS);
+      }, PHASE_DURATIONS_MS.pending);
 
       return () => {
         clearTimeout(timeoutId);
@@ -101,7 +101,7 @@ function useGame() {
         setViewingIndex(prev => clampImageIndex(prev + 1, totalRounds));
         setPendingGuess(undefined);
         setPhase("idle");
-      }, REVEAL_DELAY_MS);
+      }, PHASE_DURATIONS_MS.revealed);
 
       return () => {
         clearTimeout(timeoutId);
