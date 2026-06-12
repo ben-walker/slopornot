@@ -1,8 +1,13 @@
-import type { PerformanceTier } from "./types";
+import type { GuessPhase, PerformanceTier } from "./types";
 
 const STORAGE_KEY_GAME = "games";
 
 const ROUNDS_PER_ROW = 5;
+
+const PHASE_DURATIONS_MS: Record<Exclude<GuessPhase, "idle">, number> = {
+  pending: 1000,
+  revealed: 2000,
+};
 
 const titleBuckets: Record<PerformanceTier, string[]> = {
   perfect: ["The slop identifier has logged on"],
@@ -14,6 +19,7 @@ const titleBuckets: Record<PerformanceTier, string[]> = {
 };
 
 export {
+  PHASE_DURATIONS_MS,
   ROUNDS_PER_ROW,
   STORAGE_KEY_GAME,
   titleBuckets,
