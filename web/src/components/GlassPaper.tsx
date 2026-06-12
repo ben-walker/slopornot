@@ -1,16 +1,17 @@
 import { Paper, type PaperProps } from "@mantine/core";
 import type { ReactNode } from "react";
 import classes from "./GlassPaper.module.css";
+import { clsx } from "clsx";
 
 interface GlassPaperProps extends PaperProps {
   children?: ReactNode;
 }
 
-function GlassPaper({ ...rest }: GlassPaperProps) {
+function GlassPaper({ className, ...rest }: GlassPaperProps) {
   return (
     <Paper
       {...rest}
-      className={classes.root}
+      className={clsx(classes.root, className)}
     />
   );
 }
