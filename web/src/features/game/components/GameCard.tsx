@@ -37,7 +37,7 @@ function GameCard({ guess, image, pendingGuess, phase }: GameCardProps) {
           <GameAttribution
             attribution={image.attribution}
             isCorrect={guess.isCorrect}
-            phase={phase}
+            isRevealing={phase === "revealed"}
           />
         </Box>
       )}

@@ -1,6 +1,6 @@
 import { Anchor, Code, Group, Stack, Text } from "@mantine/core";
-import type { Attribution, GuessPhase } from "src/features/game/types";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
+import type { Attribution } from "src/features/game/types";
 import { GlassPaper } from "src/components/GlassPaper";
 import classes from "./GameAttribution.module.css";
 
@@ -22,18 +22,18 @@ const UNSPLASH_HOME = withUtm("https://unsplash.com/");
 interface GameAttributionProps {
   attribution: Attribution;
   isCorrect: boolean;
-  phase?: GuessPhase;
+  isRevealing?: boolean;
 }
 
 function GameAttribution({
   attribution,
   isCorrect,
-  phase,
+  isRevealing,
 }: GameAttributionProps) {
   return (
     <GlassPaper
       className={classes.paper}
-      data-phase={phase}
+      data-is-revealing={isRevealing}
       p="sm"
       radius="md"
       shadow="xl"

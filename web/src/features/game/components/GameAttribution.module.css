@@ -1,4 +1,4 @@
-.paper[data-phase="revealed"] {
+.paper[data-is-revealing="true"] {
   opacity: 0;
   animation: fadeIn 250ms ease forwards 250ms;
 }
