@@ -1,5 +1,7 @@
 type Answer = "real" | "ai";
 
+type GuessPhase = "idle" | "pending" | "revealed";
+
 interface Guess {
   answer: Answer;
   imageId: string;
@@ -46,6 +48,7 @@ export type {
   Answer,
   Attribution,
   Guess,
+  GuessPhase,
   Game,
   Games,
   HistoryEntry,
