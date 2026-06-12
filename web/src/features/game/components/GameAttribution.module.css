@@ -1,0 +1,14 @@
+.paper[data-is-revealing="true"] {
+  opacity: 0;
+  animation: fadeIn 250ms ease forwards 250ms;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
