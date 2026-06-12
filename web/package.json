@@ -37,7 +37,7 @@
     "eslint-plugin-react-refresh": "^0.5.0",
     "eslint-plugin-react-x": "^2.2.3",
     "globals": "^17.3.0",
-    "orval": "^7.13.2",
+    "orval": "^8.17.0",
     "postcss": "^8.5.15",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
