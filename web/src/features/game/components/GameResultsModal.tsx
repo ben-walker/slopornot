@@ -73,7 +73,7 @@ function GameResultsModal({
         <Title order={4}>{title}</Title>
         <Group grow>
           {resultCards.map(({ content, label }) => (
-            <Card withBorder padding="md" ta="center" key={label}>
+            <Card withBorder padding="sm" ta="center" key={label}>
               <Text size="xs" c="dimmed">{label}</Text>
               <Text size="xl" fw="bold">
                 {content}
@@ -104,7 +104,7 @@ function GameResultsModal({
                 { color: "correct", offset: 0 },
                 { color: "incorrect", offset: 100 },
               ]}
-              h={200}
+              h={196}
               series={[{ name: ACCURACY_KEY, label: "Accuracy" }]}
               strokeWidth={5}
               type="gradient"
