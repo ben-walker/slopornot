@@ -1,4 +1,4 @@
-import { Box, Card, Image, RingProgress, Skeleton } from "@mantine/core";
+import { Box, Card, Center, Image, RingProgress, Skeleton } from "@mantine/core";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
 import type { Guess, GuessPhase, ImageEntry } from "src/features/game/types";
 import { useEffect, useState } from "react";
@@ -7,9 +7,9 @@ import { GameAttribution } from "./GameAttribution";
 import { GlassPaper } from "src/components/GlassPaper";
 import classes from "./GameCard.module.css";
 
-const RING_ICON_SIZE = 24;
-const RING_SIZE = 92;
-const RING_THICKNESS = 10;
+const RING_ICON_SIZE = 26;
+const RING_SIZE = 82;
+const RING_THICKNESS = 8;
 
 interface GameCardProps {
   guess: Guess | undefined;
@@ -88,14 +88,16 @@ function GameCard({ guess, image, pendingGuess, phase }: GameCardProps) {
             label={
               phase === "revealed"
                 ? (
-                    <Box
-                      className={classes.ringInnerCircle}
-                      data-is-correct={pendingGuess.isCorrect}
-                    >
-                      {pendingGuess.isCorrect
-                        ? <CheckIcon size={RING_ICON_SIZE} weight="bold" />
-                        : <XIcon size={RING_ICON_SIZE} weight="bold" />}
-                    </Box>
+                    <Center>
+                      <Box
+                        className={classes.ringInnerCircle}
+                        data-is-correct={pendingGuess.isCorrect}
+                      >
+                        {pendingGuess.isCorrect
+                          ? <CheckIcon size={RING_ICON_SIZE} weight="bold" />
+                          : <XIcon size={RING_ICON_SIZE} weight="bold" />}
+                      </Box>
+                    </Center>
                   )
                 : null
             }
