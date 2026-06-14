@@ -6,7 +6,7 @@ const ROUNDS_PER_ROW = 5;
 
 const PHASE_DURATIONS_MS: Record<Exclude<GuessPhase, "idle">, number> = {
   pending: 1000,
-  revealed: 2000,
+  revealed: 1800,
 };
 
 const titleBuckets: Record<PerformanceTier, string[]> = {
