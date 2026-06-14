@@ -3,15 +3,25 @@ import type { Guess, GuessPhase, ImageEntry } from "src/features/game/types";
 import { GameAttribution } from "./GameAttribution";
 import { GameRing } from "./GameRing";
 import classes from "./GameCard.module.css";
+import { useState } from "react";
 
 interface GameCardProps {
   guess: Guess | undefined;
-  image: ImageEntry | undefined;
+  image: ImageEntry;
   pendingGuess: Guess | undefined;
   phase: GuessPhase;
+  shouldLoad: boolean;
 }
 
-function GameCard({ guess, image, pendingGuess, phase }: GameCardProps) {
+function GameCard({
+  guess,
+  image,
+  pendingGuess,
+  phase,
+  shouldLoad,
+}: GameCardProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <Card
       className={classes.card}
@@ -19,20 +29,23 @@ function GameCard({ guess, image, pendingGuess, phase }: GameCardProps) {
       radius="md"
       shadow="md"
     >
-      {image
-        ? (
-            <Image
-              className={classes.image}
-              src={image.storageUrl}
-            />
-          )
-        : <Skeleton h="100%" w="100%" />}
+      <Skeleton h="100%" visible={!isLoaded} w="100%">
+        {shouldLoad && (
+          <Image
+            className={classes.image}
+            onLoad={() => {
+              setIsLoaded(true);
+            }}
+            src={image.storageUrl}
+          />
+        )}
+      </Skeleton>
       {pendingGuess && phase !== "idle" && (
         <Box className={classes.ringWrapper}>
           <GameRing isCorrect={pendingGuess.isCorrect} phase={phase} />
         </Box>
       )}
-      {guess && image && (
+      {guess && (
         <Box className={classes.attribution}>
           <GameAttribution
             attribution={image.attribution}

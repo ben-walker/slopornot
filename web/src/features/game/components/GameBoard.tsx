@@ -1,17 +1,16 @@
 import type { Answer, Guess, GuessPhase, ImageEntry } from "src/features/game/types";
-import { Box, Button, Container, Flex, Group, Stack, Text } from "@mantine/core";
-import { GameCard } from "./GameCard";
+import { Box, Button, Card, Container, Flex, Group, Skeleton, Stack, Text } from "@mantine/core";
+import { GameCarousel } from "./GameCarousel";
 import { GameProgress } from "./GameProgress";
 import classes from "./GameBoard.module.css";
 import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
 interface GameBoardProps {
   activeIndex: number;
-  currentGuess: Guess | undefined;
   guesses: Guess[];
-  image: ImageEntry | undefined;
+  images: ImageEntry[];
   isGameOver: boolean;
-  onGuess: (image: ImageEntry, answer: Answer) => void;
+  onGuess: (answer: Answer) => void;
   onNavigate: (index: number) => void;
   onShowResults: () => void;
   pendingGuess: Guess | undefined;
@@ -21,9 +20,8 @@ interface GameBoardProps {
 
 function GameBoard({
   activeIndex,
-  currentGuess,
   guesses,
-  image,
+  images,
   isGameOver,
   onGuess,
   onNavigate,
@@ -34,39 +32,46 @@ function GameBoard({
 }: GameBoardProps) {
   const timeUntilMidnight = useTimeUntilMidnight();
 
-  const onGuessWrapper = (answer: Answer) => () => {
-    if (!image) {
-      return;
-    }
-
-    onGuess(image, answer);
+  const handleGuess = (answer: Answer) => () => {
+    onGuess(answer);
   };
 
-  const isButtonDisabled = !image || phase !== "idle";
+  const isButtonDisabled = images.length === 0 || phase !== "idle";
 
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column" gap="md">
       <Box className={classes.cardArea} flex={1} mih={0} px="md">
         <Stack h="100%" gap="sm" align="center" justify="center">
-          <GameCard
-            guess={currentGuess}
-            image={image}
-            pendingGuess={pendingGuess}
-            phase={phase}
-          />
+          {images.length === 0
+            ? (
+                <Card className={classes.placeholder} p={0} radius="md" shadow="md">
+                  <Skeleton h="100%" w="100%" />
+                </Card>
+              )
+            : (
+                <GameCarousel
+                  activeIndex={activeIndex}
+                  guesses={guesses}
+                  images={images}
+                  isGameOver={isGameOver}
+                  onNavigate={onNavigate}
+                  pendingGuess={pendingGuess}
+                  phase={phase}
+                />
+              )}
           {!isGameOver && (
             <Group grow w="100%" maw={400}>
               <Button
                 variant="default"
                 disabled={isButtonDisabled}
-                onClick={onGuessWrapper("real")}
+                onClick={handleGuess("real")}
               >
                 Real
               </Button>
               <Button
                 variant="default"
                 disabled={isButtonDisabled}
-                onClick={onGuessWrapper("ai")}
+                onClick={handleGuess("ai")}
               >
                 Slop
               </Button>
