@@ -1,4 +1,4 @@
-import type { Answer, Games, Guess, GuessPhase, HistoryEntry, ImageEntry } from "src/features/game/types";
+import type { Answer, Games, Guess, GuessPhase, HistoryEntry } from "src/features/game/types";
 import { PHASE_DURATIONS_MS, STORAGE_KEY_GAME } from "src/features/game/constants";
 import { buildImageEntry, clampImageIndex, shuffleImages } from "src/features/game/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -23,6 +23,9 @@ function useGame() {
 
   const [games, setGames] = useLocalStorage<Games>({
     defaultValue: {},
+    // Read synchronously so the carousel mounts on the correct slide
+    // instead of animating from slide 0 after hydration.
+    getInitialValueInEffect: false,
     key: STORAGE_KEY_GAME,
   });
 
@@ -35,8 +38,6 @@ function useGame() {
   const completedRounds = guesses.length;
   const isGameOver = totalRounds > 0 && completedRounds >= totalRounds;
   const activeIndex = isGameOver ? viewingIndex : completedRounds;
-  const currentImage = images[activeIndex];
-  const currentGuess = guesses[activeIndex] ?? (phase === "revealed" ? pendingGuess : undefined);
 
   const history = useMemo<HistoryEntry[]>(() => {
     return Object.entries(games)
@@ -60,8 +61,14 @@ function useGame() {
     return history.reduce((sum, entry) => sum + entry.accuracy, 0) / history.length / 100;
   }, [history]);
 
-  const onGuess = useCallback((image: ImageEntry, answer: Answer) => {
+  const onGuess = useCallback((answer: Answer) => {
     if (phase !== "idle") {
+      return;
+    }
+
+    const image = images[activeIndex];
+
+    if (!image) {
       return;
     }
 
@@ -69,7 +76,7 @@ function useGame() {
 
     setPendingGuess({ answer, imageId: image.id, isCorrect });
     setPhase("pending");
-  }, [phase]);
+  }, [activeIndex, images, phase]);
 
   useEffect(() => {
     if (phase === "pending") {
@@ -98,7 +105,7 @@ function useGame() {
           });
         }
 
-        setViewingIndex(prev => clampImageIndex(prev + 1, totalRounds));
+        setViewingIndex(clampImageIndex(completedRounds + 1, totalRounds));
         setPendingGuess(undefined);
         setPhase("idle");
       }, PHASE_DURATIONS_MS.revealed);
@@ -107,7 +114,7 @@ function useGame() {
         clearTimeout(timeoutId);
       };
     }
-  }, [phase, pendingGuess, setGames, today, totalRounds]);
+  }, [phase, pendingGuess, setGames, today, totalRounds, completedRounds]);
 
   const onNavigate = useCallback((index: number) => {
     setViewingIndex(clampImageIndex(index, totalRounds));
@@ -117,10 +124,9 @@ function useGame() {
     activeIndex,
     averageCorrect,
     completedRounds,
-    currentGuess,
-    currentImage,
     guesses,
     history,
+    images,
     isGameOver,
     onGuess,
     onNavigate,

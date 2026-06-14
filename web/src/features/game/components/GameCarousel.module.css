@@ -1,0 +1,6 @@
+.carousel {
+  width: calc(100% + var(--mantine-spacing-md) * 2);
+  margin-inline: calc(var(--mantine-spacing-md) * -1);
+  height: var(--card-height);
+  min-height: 0;
+}

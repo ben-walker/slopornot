@@ -1,11 +1,8 @@
 .card {
   border: 0;
-  aspect-ratio: 4 / 3;
-  /* Single card — take full width up to whatever fits vertically at 4:3. */
-  width: min(
-    100cqw,
-    calc(100cqh * 4 / 3)
-  );
+  width: var(--card-width);
+  height: 100%;
+  margin-inline: auto;
   overflow: hidden;
 
   .image {

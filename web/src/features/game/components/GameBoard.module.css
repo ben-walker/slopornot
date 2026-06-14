@@ -1,5 +1,14 @@
 .cardArea {
   container-type: size;
+
+  --card-width: min(100cqw, calc(100cqh * 4 / 3));
+  --card-height: min(100cqw * 3 / 4, 100cqh);
+
+  .placeholder {
+    border: 0;
+    width: var(--card-width);
+    height: var(--card-height);
+  }
 }
 
 .countdownText {
