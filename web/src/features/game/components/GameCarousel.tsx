@@ -6,7 +6,7 @@ import type { EmblaCarouselType } from "embla-carousel";
 import { GameCard } from "./GameCard";
 import classes from "./GameCarousel.module.css";
 
-const PRELOAD_AHEAD = 2;
+const PRELOAD_AHEAD = 1;
 
 interface GameCarouselProps {
   activeIndex: number;
@@ -57,7 +57,10 @@ function GameCarousel({
 
   return (
     <Carousel
-      className={classes.carousel}
+      classNames={{
+        control: classes.control,
+        root: classes.root,
+      }}
       emblaOptions={{ watchDrag }}
       getEmblaApi={setEmbla}
       height="100%"
