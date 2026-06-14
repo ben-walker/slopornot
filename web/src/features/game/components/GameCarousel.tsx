@@ -47,6 +47,30 @@ function GameCarousel({
     }
   }, [activeIndex, embla]);
 
+  useEffect(() => {
+    if (!embla || !isGameOver) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        embla.scrollPrev();
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        embla.scrollNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [embla, isGameOver]);
+
   const onSlideChange = (index: number) => {
     if (!isGameOver) {
       return;
@@ -67,7 +91,7 @@ function GameCarousel({
       initialSlide={initialSlide}
       onSlideChange={onSlideChange}
       withControls={isGameOver}
-      withKeyboardEvents={isGameOver}
+      withKeyboardEvents={false}
       nextControlIcon={<CaretRightIcon />}
       previousControlIcon={<CaretLeftIcon />}
     >
