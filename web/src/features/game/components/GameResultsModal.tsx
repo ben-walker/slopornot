@@ -1,5 +1,5 @@
 import { Button, Card, CopyButton, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
-import { CheckIcon, ShareIcon } from "@phosphor-icons/react";
+import { CheckIcon, ShareNetworkIcon } from "@phosphor-icons/react";
 import type { Guess, HistoryEntry } from "src/features/game/types";
 import { format, parse } from "date-fns";
 import { LineChart } from "@mantine/charts";
@@ -83,18 +83,6 @@ function GameResultsModal({
             </Card>
           ))}
         </Group>
-        <CopyButton timeout={COPY_BUTTON_TIMEOUT} value={shareText}>
-          {({ copied, copy }) => (
-            <Button
-              color={copied ? "teal" : "blue"}
-              fullWidth
-              onClick={copy}
-              rightSection={copied ? <CheckIcon size={ICON_SIZE} weight="bold" /> : <ShareIcon size={ICON_SIZE} weight="bold" />}
-            >
-              {copied ? "Copied to clipboard" : "Share"}
-            </Button>
-          )}
-        </CopyButton>
         {history.length > 0 && (
           <Stack gap="xs">
             <Text size="md" fw="bold">Accuracy over time</Text>
@@ -122,6 +110,18 @@ function GameResultsModal({
             />
           </Stack>
         )}
+        <CopyButton timeout={COPY_BUTTON_TIMEOUT} value={shareText}>
+          {({ copied, copy }) => (
+            <Button
+              color={copied ? "teal" : "blue"}
+              fullWidth
+              onClick={copy}
+              rightSection={copied ? <CheckIcon size={ICON_SIZE} weight="bold" /> : <ShareNetworkIcon size={ICON_SIZE} weight="bold" />}
+            >
+              {copied ? "Copied to clipboard" : "Share"}
+            </Button>
+          )}
+        </CopyButton>
       </Stack>
     </Modal>
   );
