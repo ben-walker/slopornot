@@ -68,6 +68,7 @@ const IMAGE_WIDTH = 1024;
 const IMAGE_HEIGHT = 768;
 const WEBP_QUALITY = 85;
 const MAX_DESCRIPTION_CHARS = 200;
+const PHOTO_TOPICS = "nature,film,architecture-interior,street-photography,travel,people,animals,food-drink";
 
 const dateHash = createHash("sha256").update(targetDate).digest().readUInt8(0);
 const aiCount = (dateHash % (MAX_AI - MIN_AI + 1)) + MIN_AI;
@@ -112,7 +113,7 @@ const UnsplashResponse = Type.Array(Type.Object({
   }),
 }));
 
-const realRes = await unsplash.get("photos/random", { searchParams: { count: SET_SIZE, orientation: "landscape" } }).json();
+const realRes = await unsplash.get("photos/random", { searchParams: { count: SET_SIZE, orientation: "landscape", topics: PHOTO_TOPICS } }).json();
 const realData = Value.Parse(UnsplashResponse, realRes);
 
 if (realData.length < SET_SIZE) {
