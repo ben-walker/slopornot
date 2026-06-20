@@ -13,7 +13,7 @@ const ACCURACY_KEY = "accuracy" satisfies keyof HistoryEntry;
 const COPY_BUTTON_TIMEOUT = 1500;
 const ICON_SIZE = 16;
 const Y_AXIS_WIDTH = 50;
-const CHART_HEIGHT = 196;
+const CHART_HEIGHT = 200;
 
 interface GameResultsModalProps {
   averageCorrect: number;
