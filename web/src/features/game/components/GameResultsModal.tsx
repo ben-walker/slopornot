@@ -4,6 +4,7 @@ import type { Guess, HistoryEntry } from "src/features/game/types";
 import { format, parse } from "date-fns";
 import { LineChart } from "@mantine/charts";
 import { ROUNDS_PER_ROW } from "src/features/game/constants";
+import classes from "./GameResultsModal.module.css";
 import { getTitle } from "src/features/game/utils";
 import { useMemo } from "react";
 
@@ -56,12 +57,13 @@ function GameResultsModal({
     ).join("\n");
     const today = format(new Date(), "MMM d, yyyy");
 
-    return `slopornot • ${today} • ${String(correctCount)}/${String(totalRounds)}\n\n${dotRows}`;
+    return `slopornot.sh • ${today} • ${String(correctCount)}/${String(totalRounds)}\n\n${dotRows}`;
   }, [correctCount, guesses, totalRounds]);
 
   return (
     <Modal
       centered
+      className={classes.root}
       closeOnClickOutside
       closeOnEscape
       onClose={onClose}
@@ -70,7 +72,7 @@ function GameResultsModal({
       withCloseButton={false}
     >
       <Stack gap="md">
-        <Title order={4}>{title}</Title>
+        <Title className={classes.title} data-autofocus order={4} tabIndex={-1}>{title}</Title>
         <Group grow>
           {resultCards.map(({ content, label }) => (
             <Card withBorder padding="sm" ta="center" key={label}>
