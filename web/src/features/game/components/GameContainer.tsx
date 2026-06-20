@@ -16,6 +16,7 @@ function GameContainer() {
     onNavigate,
     pendingGuess,
     phase,
+    streak,
     totalRounds,
   } = useGame();
 
@@ -35,6 +36,7 @@ function GameContainer() {
         history={history}
         isOpen={isResultsOpen}
         onClose={closeResults}
+        streak={streak}
         totalRounds={totalRounds}
       />
       <GameBoard

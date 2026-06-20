@@ -1,7 +1,7 @@
 import { Button, Card, CopyButton, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
 import { CheckIcon, ShareNetworkIcon } from "@phosphor-icons/react";
 import type { Guess, HistoryEntry } from "src/features/game/types";
-import { format, parse } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { LineChart } from "@mantine/charts";
 import { ROUNDS_PER_ROW } from "src/features/game/constants";
 import classes from "./GameResultsModal.module.css";
@@ -20,6 +20,7 @@ interface GameResultsModalProps {
   history: HistoryEntry[];
   isOpen: boolean;
   onClose: () => void;
+  streak: number;
   totalRounds: number;
 }
 
@@ -29,6 +30,7 @@ function GameResultsModal({
   history,
   isOpen,
   onClose,
+  streak,
   totalRounds,
 }: GameResultsModalProps) {
   const correctCount = useMemo(() => (
@@ -48,7 +50,11 @@ function GameResultsModal({
       content: <NumberFormatter decimalScale={0} suffix="%" value={averageCorrect * 100} />,
       label: "Average",
     },
-  ], [averageCorrect, correctCount, totalRounds]);
+    {
+      content: streak,
+      label: "Streak",
+    },
+  ], [averageCorrect, correctCount, streak, totalRounds]);
 
   const shareText = useMemo(() => {
     const dots = guesses.map(guess => (guess.isCorrect ? "🔵" : "⚫"));
@@ -104,7 +110,7 @@ function GameResultsModal({
               withTooltip={false}
               xAxisProps={{
                 tickFormatter: (date: string) => {
-                  return format(parse(date, "yyyy-MM-dd", new Date()), "MMM d");
+                  return format(parseISO(date), "MMM d");
                 },
               }}
               yAxisProps={{ domain: [0, 100], width: Y_AXIS_WIDTH }}

@@ -1,6 +1,7 @@
 import type { Answer, Games, Guess, GuessPhase, HistoryEntry } from "src/features/game/types";
 import { PHASE_DURATIONS_MS, STORAGE_KEY_GAME } from "src/features/game/constants";
 import { buildImageEntry, clampImageIndex, shuffleImages } from "src/features/game/utils";
+import { differenceInCalendarDays, parseISO } from "date-fns";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useGetSetsDate } from "src/api/generated";
 import { useLocalStorage } from "@mantine/hooks";
@@ -59,6 +60,34 @@ function useGame() {
     }
 
     return history.reduce((sum, entry) => sum + entry.accuracy, 0) / history.length / 100;
+  }, [history]);
+
+  const streak = useMemo(() => {
+    if (!history.length) {
+      return 0;
+    }
+
+    let count = 0;
+    let expected: Date | null = null;
+
+    for (let i = history.length - 1; i >= 0; i--) {
+      const entry = history[i];
+
+      if (!entry) {
+        break;
+      }
+
+      const date = parseISO(entry.date);
+
+      if (expected && differenceInCalendarDays(expected, date) !== 1) {
+        break;
+      }
+
+      count += 1;
+      expected = date;
+    }
+
+    return count;
   }, [history]);
 
   const onGuess = useCallback((answer: Answer) => {
@@ -132,6 +161,7 @@ function useGame() {
     onNavigate,
     pendingGuess,
     phase,
+    streak,
     totalRounds,
   };
 }
