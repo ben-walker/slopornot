@@ -22,7 +22,7 @@
     "embla-carousel-react": "^8.6.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router": "^7.15.0",
+    "react-router": "^7.15.1",
     "recharts": "^3.8.1",
     "typebox": "^1.1.6"
   },
