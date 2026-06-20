@@ -100,7 +100,7 @@ const UnsplashResponse = Type.Array(Type.Object({
   id: Type.String(),
   alt_description: Type.String(),
   description: Type.Union([Type.String(), Type.Null()]),
-  urls: Type.Object({ regular: Type.String() }),
+  urls: Type.Object({ raw: Type.String() }),
   links: Type.Object({
     html: Type.String(),
     download_location: Type.String(),
@@ -123,7 +123,7 @@ if (realData.length < SET_SIZE) {
 const realImages: FetchedImage[] = await Promise.all(
   realData.slice(aiCount).map(async (photo) => {
     const [res] = await Promise.all([
-      ky.get(photo.urls.regular, {
+      ky.get(`${photo.urls.raw}&w=1600&q=90&fm=jpg`, {
         timeout: FETCH_TIMEOUT_MS,
         retry: { limit: 3 },
       }),
