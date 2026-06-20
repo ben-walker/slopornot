@@ -12,6 +12,7 @@ const DATE_KEY = "date" satisfies keyof HistoryEntry;
 const ACCURACY_KEY = "accuracy" satisfies keyof HistoryEntry;
 const COPY_BUTTON_TIMEOUT = 1500;
 const ICON_SIZE = 16;
+const Y_AXIS_WIDTH = 50;
 
 interface GameResultsModalProps {
   averageCorrect: number;
@@ -106,7 +107,7 @@ function GameResultsModal({
                   return format(parse(date, "yyyy-MM-dd", new Date()), "MMM d");
                 },
               }}
-              yAxisProps={{ domain: [0, 100] }}
+              yAxisProps={{ domain: [0, 100], width: Y_AXIS_WIDTH }}
             />
           </Stack>
         )}
