@@ -13,6 +13,7 @@ const ACCURACY_KEY = "accuracy" satisfies keyof HistoryEntry;
 const COPY_BUTTON_TIMEOUT = 1500;
 const ICON_SIZE = 16;
 const Y_AXIS_WIDTH = 50;
+const CHART_HEIGHT = 196;
 
 interface GameResultsModalProps {
   averageCorrect: number;
@@ -97,14 +98,8 @@ function GameResultsModal({
               curveType="monotone"
               data={history}
               dataKey={DATE_KEY}
-              gradientStops={[
-                { color: "correct", offset: 0 },
-                { color: "incorrect", offset: 100 },
-              ]}
-              h={196}
-              series={[{ name: ACCURACY_KEY, label: "Accuracy" }]}
-              strokeWidth={5}
-              type="gradient"
+              h={CHART_HEIGHT}
+              series={[{ name: ACCURACY_KEY, label: "Accuracy", color: "correct" }]}
               valueFormatter={value => `${String(value)}%`}
               withDots
               withTooltip={false}
