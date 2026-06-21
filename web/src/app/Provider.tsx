@@ -1,9 +1,11 @@
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/carousel/styles.css";
+import "@mantine/notifications/styles.css";
 import { DEFAULT_THEME, MantineProvider, createTheme } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router";
+import { Notifications } from "@mantine/notifications";
 
 const theme = createTheme({
   colors: {
@@ -24,6 +26,7 @@ function Provider({
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider defaultColorScheme="auto" theme={theme}>
+        <Notifications />
         <BrowserRouter>
           {children}
         </BrowserRouter>
