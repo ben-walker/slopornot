@@ -17,9 +17,10 @@ interface UnlockedAward {
 
 type UnlockedAwards = Partial<Record<AwardId, UnlockedAward>>;
 
-// TODO: add AwardWithStatus = Award & { isUnlocked: boolean; unlockedAt?: string }
-// so useAwards can hand the menu a pre-merged list and the menu never touches
-// the raw unlocked map. Revisit when the award list grows past one (and re-evaluate shape)
+type AwardWithStatus = Award & (
+  | ({ isUnlocked: true } & UnlockedAward)
+  | { isUnlocked: false }
+);
 
 export {
   AWARD_IDS,
@@ -28,6 +29,7 @@ export {
 export type {
   Award,
   AwardId,
+  AwardWithStatus,
   UnlockedAward,
   UnlockedAwards,
 };

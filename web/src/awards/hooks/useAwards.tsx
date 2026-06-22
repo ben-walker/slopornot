@@ -1,8 +1,8 @@
 import { AWARDS, STORAGE_KEY_AWARDS } from "src/awards/constants";
-import type { AwardId, UnlockedAwards } from "src/awards/types";
+import type { AwardId, AwardWithStatus, UnlockedAwards } from "src/awards/types";
+import { useCallback, useMemo } from "react";
 import { TrophyIcon } from "@phosphor-icons/react";
 import { notifications } from "@mantine/notifications";
-import { useCallback } from "react";
 import { useLocalStorage } from "@mantine/hooks";
 
 const ICON_SIZE = 22;
@@ -39,7 +39,18 @@ function useAwards() {
     }));
   }, [setUnlockedAwards, unlockedAwards]);
 
+  const awards = useMemo<AwardWithStatus[]>(() => (
+    AWARDS.map((award) => {
+      const unlockedAward = unlockedAwards[award.id];
+
+      return unlockedAward
+        ? { ...award, isUnlocked: true, ...unlockedAward }
+        : { ...award, isUnlocked: false };
+    })
+  ), [unlockedAwards]);
+
   return {
+    awards,
     unlockAward,
   };
 }
