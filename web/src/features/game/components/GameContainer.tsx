@@ -1,5 +1,7 @@
+import { AWARD_IDS } from "src/awards/types";
 import { GameBoard } from "./GameBoard";
 import { GameResultsModal } from "./GameResultsModal";
+import { useAwards } from "src/awards/hooks/useAwards";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
 import { useGame } from "src/features/game/hooks/useGame";
@@ -20,6 +22,8 @@ function GameContainer() {
     totalRounds,
   } = useGame();
 
+  const { unlockAward } = useAwards();
+
   const [isResultsOpen, { open: openResults, close: closeResults }] = useDisclosure(false);
 
   useEffect(() => {
@@ -27,6 +31,12 @@ function GameContainer() {
       openResults();
     }
   }, [isGameOver, openResults]);
+
+  useEffect(() => {
+    if (isGameOver && guesses.every(guess => guess.isCorrect)) {
+      unlockAward(AWARD_IDS.perfectSet);
+    }
+  }, [guesses, isGameOver, unlockAward]);
 
   return (
     <>

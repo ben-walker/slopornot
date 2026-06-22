@@ -2,10 +2,12 @@ import { Button, Card, CopyButton, Group, Modal, NumberFormatter, Stack, Text, T
 import { CheckIcon, ShareNetworkIcon } from "@phosphor-icons/react";
 import type { Guess, HistoryEntry } from "src/features/game/types";
 import { format, parseISO } from "date-fns";
+import { AWARD_IDS } from "src/awards/types";
 import { LineChart } from "@mantine/charts";
 import { ROUNDS_PER_ROW } from "src/features/game/constants";
 import classes from "./GameResultsModal.module.css";
 import { getTitle } from "src/features/game/utils";
+import { useAwards } from "src/awards/hooks/useAwards";
 import { useMemo } from "react";
 
 const DATE_KEY = "date" satisfies keyof HistoryEntry;
@@ -34,6 +36,8 @@ function GameResultsModal({
   streak,
   totalRounds,
 }: GameResultsModalProps) {
+  const { unlockAward } = useAwards();
+
   const correctCount = useMemo(() => (
     guesses.filter(guess => guess.isCorrect).length
   ), [guesses]);
@@ -117,7 +121,10 @@ function GameResultsModal({
             <Button
               color={copied ? "teal" : "blue"}
               fullWidth
-              onClick={copy}
+              onClick={() => {
+                copy();
+                unlockAward(AWARD_IDS.shareResults);
+              }}
               rightSection={copied ? <CheckIcon size={ICON_SIZE} weight="bold" /> : <ShareNetworkIcon size={ICON_SIZE} weight="bold" />}
             >
               {copied ? "Copied to clipboard" : "Share"}
