@@ -1,5 +1,7 @@
 import { AWARD_IDS, type Award } from "./types";
 
+const AWARD_ICON_SIZE = 20;
+
 const AWARDS: Award[] = [
   {
     id: AWARD_IDS.shareResults,
@@ -16,6 +18,7 @@ const AWARDS: Award[] = [
 const STORAGE_KEY_AWARDS = "awards";
 
 export {
+  AWARD_ICON_SIZE,
   AWARDS,
   STORAGE_KEY_AWARDS,
 };

@@ -1,11 +1,10 @@
-import { AWARDS, STORAGE_KEY_AWARDS } from "src/awards/constants";
+import { AWARDS, AWARD_ICON_SIZE, STORAGE_KEY_AWARDS } from "src/awards/constants";
 import type { AwardId, AwardWithStatus, UnlockedAwards } from "src/awards/types";
 import { useCallback, useMemo } from "react";
+import { ThemeIcon } from "@mantine/core";
 import { TrophyIcon } from "@phosphor-icons/react";
 import { notifications } from "@mantine/notifications";
 import { useLocalStorage } from "@mantine/hooks";
-
-const ICON_SIZE = 22;
 
 function useAwards() {
   const [unlockedAwards, setUnlockedAwards] = useLocalStorage<UnlockedAwards>({
@@ -27,9 +26,21 @@ function useAwards() {
     }
 
     notifications.show({
-      color: "yellow",
-      icon: <TrophyIcon size={ICON_SIZE} />,
+      color: "correct",
+      icon: (
+        <ThemeIcon color="correct" size="lg">
+          <TrophyIcon size={AWARD_ICON_SIZE} />
+        </ThemeIcon>
+      ),
       message: award.description,
+      styles: {
+        icon: {
+          backgroundColor: "transparent",
+          height: "auto",
+          minWidth: 0,
+          width: "auto",
+        },
+      },
       title: award.title,
     });
 
