@@ -33,7 +33,7 @@
     "@types/node": "^26.0.0",
     "date-fns": "^4.1.0",
     "drizzle-kit": "^1.0.0-beta.17-67b1795",
-    "drizzle-seed": "^1.0.0-beta.17-67b1795",
+    "drizzle-seed": "^1.0.0-rc.4-273829f",
     "eslint": "^10.0.1",
     "globals": "^17.6.0",
     "tsdown": "^0.22.2",
