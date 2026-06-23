@@ -1,5 +1,7 @@
-import { AppShell, Flex, Title } from "@mantine/core";
+import { AppShell, Title } from "@mantine/core";
+import { AwardsButton } from "src/features/awards/components/AwardsButton";
 import { Outlet } from "react-router";
+import classes from "./AppRoot.module.css";
 
 function AppRoot() {
   return (
@@ -8,10 +10,12 @@ function AppRoot() {
         height: 60,
       }}
     >
-      <AppShell.Header withBorder={false}>
-        <Flex align="center" justify="center" h="100%">
-          <Title order={3}>slopornot</Title>
-        </Flex>
+      <AppShell.Header className={classes.header} withBorder={false}>
+        <span />
+        <Title order={3}>slopornot</Title>
+        <div className={classes.actions}>
+          <AwardsButton />
+        </div>
       </AppShell.Header>
       <AppShell.Main>
         <Outlet />
