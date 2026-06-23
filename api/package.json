@@ -24,13 +24,13 @@
     "fastify-plugin": "^5.1.0",
     "ky": "^2.0.2",
     "postgres": "^3.4.8",
-    "sharp": "^0.34.5",
-    "typebox": "^1.1.6"
+    "sharp": "^0.35.2",
+    "typebox": "~1.2.19"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.9.0",
-    "@types/node": "^25.3.0",
+    "@types/node": "^26.0.0",
     "date-fns": "^4.1.0",
     "drizzle-kit": "^1.0.0-beta.17-67b1795",
     "drizzle-seed": "^1.0.0-beta.17-67b1795",

@@ -2,7 +2,7 @@ import { defineConfig } from "tsdown";
 
 export default defineConfig({
   deps: {
-    onlyAllowBundle: false,
+    onlyBundle: false,
   },
   entry: {
     "main": "./src/main.ts",
