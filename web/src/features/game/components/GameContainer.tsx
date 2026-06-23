@@ -22,7 +22,7 @@ function GameContainer() {
     totalRounds,
   } = useGame();
 
-  const { unlockAward } = useAwards();
+  const { unlockAward, unlockStreakAwards } = useAwards();
 
   const [isResultsOpen, { open: openResults, close: closeResults }] = useDisclosure(false);
 
@@ -33,8 +33,20 @@ function GameContainer() {
   }, [isGameOver, openResults]);
 
   useEffect(() => {
-    if (isGameOver && guesses.every(guess => guess.isCorrect)) {
+    unlockStreakAwards(streak);
+  }, [streak, unlockStreakAwards]);
+
+  useEffect(() => {
+    if (!isGameOver) {
+      return;
+    }
+
+    if (guesses.every(guess => guess.isCorrect)) {
       unlockAward(AWARD_IDS.perfectSet);
+    }
+
+    if (guesses.every(guess => !guess.isCorrect)) {
+      unlockAward(AWARD_IDS.failedSet);
     }
   }, [guesses, isGameOver, unlockAward]);
 

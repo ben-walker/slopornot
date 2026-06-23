@@ -50,6 +50,14 @@ function useAwards() {
     }));
   }, [setUnlockedAwards, unlockedAwards]);
 
+  const unlockStreakAwards = useCallback((streak: number) => {
+    AWARDS.forEach((award) => {
+      if (award.kind === "streak" && streak >= award.threshold) {
+        unlockAward(award.id);
+      }
+    });
+  }, [unlockAward]);
+
   const awards = useMemo<AwardWithStatus[]>(() => (
     AWARDS.map((award) => {
       const unlockedAward = unlockedAwards[award.id];
@@ -63,6 +71,7 @@ function useAwards() {
   return {
     awards,
     unlockAward,
+    unlockStreakAwards,
   };
 }
 
