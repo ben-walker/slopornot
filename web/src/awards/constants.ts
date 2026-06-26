@@ -29,6 +29,12 @@ const AWARDS: Award[] = [
     description: "Get every guess wrong",
   },
   {
+    id: AWARD_IDS.symmetric,
+    kind: "action",
+    title: "Rorschlop",
+    description: "Get symmetrical results",
+  },
+  {
     id: AWARD_IDS.streak2,
     kind: "streak",
     threshold: 2,

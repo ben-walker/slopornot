@@ -1,12 +1,11 @@
 import { Button, Card, CopyButton, Group, Modal, NumberFormatter, Stack, Text, Title } from "@mantine/core";
 import { CheckIcon, ShareNetworkIcon } from "@phosphor-icons/react";
 import type { Guess, HistoryEntry } from "src/features/game/types";
+import { chunkIntoRows, getTitle } from "src/features/game/utils";
 import { format, parseISO } from "date-fns";
 import { AWARD_IDS } from "src/awards/types";
 import { LineChart } from "@mantine/charts";
-import { ROUNDS_PER_ROW } from "src/features/game/constants";
 import classes from "./GameResultsModal.module.css";
-import { getTitle } from "src/features/game/utils";
 import { useAwards } from "src/awards/hooks/useAwards";
 import { useMemo } from "react";
 
@@ -63,10 +62,9 @@ function GameResultsModal({
 
   const shareText = useMemo(() => {
     const dots = guesses.map(guess => (guess.isCorrect ? "🔵" : "⚫"));
-    const rowCount = Math.ceil(dots.length / ROUNDS_PER_ROW);
-    const dotRows = Array.from({ length: rowCount }, (_, i) =>
-      dots.slice(i * ROUNDS_PER_ROW, (i + 1) * ROUNDS_PER_ROW).join(""),
-    ).join("\n");
+    const dotRows = chunkIntoRows(dots)
+      .map(row => row.join(""))
+      .join("\n");
     const today = format(new Date(), "MMM d, yyyy");
 
     return `slopornot.sh • ${today} • ${String(correctCount)}/${String(totalRounds)}\n\n${dotRows}`;

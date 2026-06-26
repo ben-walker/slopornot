@@ -1,7 +1,7 @@
 import type { Attribution, ImageEntry, PerformanceTier } from "./types";
+import { ROUNDS_PER_ROW, titleBuckets } from "./constants";
 import { createMulberry32, hashSeed } from "src/utils/random";
 import type { GetSetsDate200ImagesItem } from "src/api/generated";
-import { titleBuckets } from "./constants";
 
 const buildImageAttribution = (attribution: GetSetsDate200ImagesItem["attribution"]): Attribution => {
   if (attribution.kind === "ai") {
@@ -26,6 +26,14 @@ const buildImageEntry = (image: GetSetsDate200ImagesItem): ImageEntry => ({
   storageUrl: image.storage_url,
   attribution: buildImageAttribution(image.attribution),
 });
+
+const chunkIntoRows = <T>(items: T[]): T[][] => {
+  const rowCount = Math.ceil(items.length / ROUNDS_PER_ROW);
+
+  return Array.from({ length: rowCount }, (_, i) => (
+    items.slice(i * ROUNDS_PER_ROW, (i + 1) * ROUNDS_PER_ROW)
+  ));
+};
 
 const getBucketKey = (ratio: number): PerformanceTier => {
   if (ratio === 1) {
@@ -77,6 +85,7 @@ const shuffleImages = (images: ImageEntry[], seed: string): ImageEntry[] => {
 
 export {
   buildImageEntry,
+  chunkIntoRows,
   clampImageIndex,
   getTitle,
   shuffleImages,
