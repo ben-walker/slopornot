@@ -1,6 +1,5 @@
 import { Group, ScrollArea, Stack, Text, ThemeIcon } from "@mantine/core";
-import { LockIcon, TrophyIcon } from "@phosphor-icons/react";
-import { AWARD_ICON_SIZE } from "src/awards/constants";
+import { AwardIcon } from "src/awards/AwardIcon";
 import type { AwardWithStatus } from "src/awards/types";
 
 const MAX_HEIGHT = 360;
@@ -26,7 +25,7 @@ function AwardsList({ awards }: AwardsListProps) {
                 color={award.isUnlocked ? "correct" : "gray"}
                 size="lg"
               >
-                {award.isUnlocked ? <TrophyIcon size={AWARD_ICON_SIZE} /> : <LockIcon size={AWARD_ICON_SIZE} />}
+                <AwardIcon isLocked={!award.isUnlocked} />
               </ThemeIcon>
               <Stack gap={2}>
                 <Text fw="bold" size="sm">{award.title}</Text>
