@@ -9,7 +9,7 @@
   echo "};"
 } > /usr/share/nginx/html/config.js
 
-echo "version: $RAILWAY_GIT_COMMIT_SHA"
-echo "version2: $RAILWAY_DEPLOYMENT_ID"
+VERSION="${RAILWAY_GIT_COMMIT_SHA:-${RAILWAY_DEPLOYMENT_ID:-dev}}"
+echo "{\"version\":\"${VERSION}\"}" > /usr/share/nginx/html/version.json
 
 exec nginx -g "daemon off;"

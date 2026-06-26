@@ -6,6 +6,7 @@ import { DEFAULT_THEME, MantineProvider, createTheme } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router";
 import { Notifications } from "@mantine/notifications";
+import { VersionCheck } from "./VersionCheck";
 
 const theme = createTheme({
   colors: {
@@ -27,6 +28,7 @@ function Provider({
     <QueryClientProvider client={queryClient}>
       <MantineProvider defaultColorScheme="auto" theme={theme}>
         <Notifications />
+        <VersionCheck />
         <BrowserRouter>
           {children}
         </BrowserRouter>
