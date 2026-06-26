@@ -2,6 +2,7 @@ import type { Answer, Guess, GuessPhase, ImageEntry } from "src/features/game/ty
 import { Box, Button, Card, Container, Flex, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { GameCarousel } from "./GameCarousel";
 import { GameProgress } from "./GameProgress";
+import { TOTAL_ROUNDS } from "src/features/game/constants";
 import classes from "./GameBoard.module.css";
 import { useTimeUntilMidnight } from "src/hooks/useTimeUntilMidnight";
 
@@ -37,6 +38,7 @@ function GameBoard({
   };
 
   const isButtonDisabled = images.length === 0 || phase !== "idle";
+  const progressRounds = totalRounds || TOTAL_ROUNDS;
 
   return (
     <Flex h="calc(100dvh - var(--app-shell-header-height))" direction="column" gap="md">
@@ -95,7 +97,7 @@ function GameBoard({
             guesses={guesses}
             isGameOver={isGameOver}
             onNavigate={onNavigate}
-            totalRounds={totalRounds}
+            count={progressRounds}
             activeIndex={activeIndex}
           />
         </Stack>

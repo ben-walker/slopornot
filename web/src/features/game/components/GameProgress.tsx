@@ -12,7 +12,7 @@ interface GameProgressProps {
   guesses: Guess[];
   isGameOver: boolean;
   onNavigate: (index: number) => void;
-  totalRounds: number;
+  count: number;
 }
 
 function GameProgress({
@@ -20,7 +20,7 @@ function GameProgress({
   guesses,
   isGameOver,
   onNavigate,
-  totalRounds,
+  count,
 }: GameProgressProps) {
   const onClick = (index: number) => () => {
     if (!isGameOver) {
@@ -32,7 +32,7 @@ function GameProgress({
 
   return (
     <SimpleGrid cols={ROUNDS_PER_ROW} spacing="sm">
-      {Array.from({ length: totalRounds }).map((_, index) => {
+      {Array.from({ length: count }).map((_, index) => {
         const guess = guesses[index];
 
         return (

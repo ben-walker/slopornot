@@ -4,6 +4,8 @@ const STORAGE_KEY_GAME = "games";
 
 const ROUNDS_PER_ROW = 5;
 
+const TOTAL_ROUNDS = 10;
+
 const PHASE_DURATIONS_MS: Record<Exclude<GuessPhase, "idle">, number> = {
   pending: 1000,
   revealed: 1800,
@@ -21,6 +23,7 @@ const titleBuckets: Record<PerformanceTier, string[]> = {
 export {
   PHASE_DURATIONS_MS,
   ROUNDS_PER_ROW,
+  TOTAL_ROUNDS,
   STORAGE_KEY_GAME,
   titleBuckets,
 };
