@@ -1,6 +1,7 @@
-import type { Attribution, ImageEntry, PerformanceTier } from "./types";
+import type { Attribution, HistoryEntry, ImageEntry, PerformanceTier } from "./types";
 import { ROUNDS_PER_ROW, titleBuckets } from "./constants";
 import { createMulberry32, hashSeed } from "src/utils/random";
+import { differenceInCalendarDays, parseISO } from "date-fns";
 import type { GetSetsDate200ImagesItem } from "src/api/generated";
 
 const buildImageAttribution = (attribution: GetSetsDate200ImagesItem["attribution"]): Attribution => {
@@ -65,6 +66,33 @@ const getTitle = (correctCount: number, totalRounds: number): string => {
   return bucket[Math.floor(Math.random() * bucket.length)] ?? "Thanks for playing today!";
 };
 
+const hasSameScoreRun = (history: HistoryEntry[], length: number): boolean => {
+  if (history.length < length) {
+    return false;
+  }
+
+  const [first, ...rest] = history.slice(-length);
+
+  if (first === undefined) {
+    return false;
+  }
+
+  let previous = first;
+
+  for (const entry of rest) {
+    const isNextDay = differenceInCalendarDays(parseISO(entry.date), parseISO(previous.date)) === 1;
+    const isSameScore = entry.accuracy === first.accuracy;
+
+    if (!isNextDay || !isSameScore) {
+      return false;
+    }
+
+    previous = entry;
+  }
+
+  return true;
+};
+
 const shuffleImages = (images: ImageEntry[], seed: string): ImageEntry[] => {
   const random = createMulberry32(hashSeed(seed));
   const result = [...images];
@@ -88,5 +116,6 @@ export {
   chunkIntoRows,
   clampImageIndex,
   getTitle,
+  hasSameScoreRun,
   shuffleImages,
 };

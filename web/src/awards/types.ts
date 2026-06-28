@@ -8,6 +8,7 @@ const AWARD_IDS = {
   perfectSet: "perfect-set",
   failedSet: "failed-set",
   symmetric: "symmetric",
+  hatTrick: "hat-trick",
 } as const;
 
 type AwardId = (typeof AWARD_IDS)[keyof typeof AWARD_IDS];

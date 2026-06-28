@@ -33,6 +33,12 @@ const AWARDS: Award[] = [
     description: "Get symmetrical results",
   },
   {
+    id: AWARD_IDS.hatTrick,
+    kind: "action",
+    title: "Hat trick",
+    description: "Get the same score 3 days in a row",
+  },
+  {
     id: AWARD_IDS.streak2,
     kind: "streak",
     threshold: 2,

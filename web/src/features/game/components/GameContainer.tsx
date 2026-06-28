@@ -1,7 +1,7 @@
+import { chunkIntoRows, hasSameScoreRun } from "src/features/game/utils";
 import { AWARD_IDS } from "src/awards/types";
 import { GameBoard } from "./GameBoard";
 import { GameResultsModal } from "./GameResultsModal";
-import { chunkIntoRows } from "src/features/game/utils";
 import { useAwards } from "src/awards/hooks/useAwards";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
@@ -61,6 +61,16 @@ function GameContainer() {
       unlockAward(AWARD_IDS.symmetric);
     }
   }, [guesses, isGameOver, unlockAward]);
+
+  useEffect(() => {
+    if (!isGameOver) {
+      return;
+    }
+
+    if (hasSameScoreRun(history, 3)) {
+      unlockAward(AWARD_IDS.hatTrick);
+    }
+  }, [history, isGameOver, unlockAward]);
 
   return (
     <>
